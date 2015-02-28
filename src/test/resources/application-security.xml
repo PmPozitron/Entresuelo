@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"					
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+ 
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+ 
+ 
+http://www.springframework.org/schema/security
+ 
+ 
+http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+ 
+    <global-method-security secured-annotations="enabled" />
+ 
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider>
+            <user-service>
+                <user name="pozitron" password="1234567" authorities="ROLE_ADMIN" />
+                <user name="non_grata" password="123" authorities="ROLE_USER" />
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+     
+    <beans:bean id="mainController" class="pmp.MainController"/>
+    
+    
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix">
+			<beans:value>/WEB-INF/pages/</beans:value>
+		</beans:property>
+		<beans:property name="suffix">
+			<beans:value>.jsp</beans:value>
+		</beans:property>
+	</beans:bean>
+  
+<!--
+
+	<http auto-config="true" use-expressions="true">
+		<intercept-url pattern="/login*" access="hasRole('ROLE_ADMIN')" />
+	</http>
+-->	
+
+	<http auto-config="true" use-expressions="true">
+		<intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
+	
+		<!-- access denied page -->
+		<access-denied-handler error-page="/403" />
+		<form-login 
+		    login-page="/login" 
+		    default-target-url="/welcome" 
+			authentication-failure-url="/login?error" 
+			username-parameter="username"
+			password-parameter="password" />
+		<logout logout-success-url="/login?logout"  />
+		<!-- enable csrf protection -->
+		<csrf/>
+	</http>
+	
+	<!-- Select users and user_roles from database 
+	<authentication-manager>
+		<authentication-provider>
+			<jdbc-user-service data-source-ref="dataSource"
+				users-by-username-query=
+					"select username,password, enabled from users where username=?"
+				authorities-by-username-query=
+					"select username, role from user_roles where username =?  " />
+		</authentication-provider>
+	</authentication-manager>
+	-->
+		
+	<beans:bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+
+		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<beans:property name="url" value="jdbc:mysql://localhost:3306/entresuelo" />
+		<beans:property name="username" value="root" />
+		<beans:property name="password" value="Galya16061985" />
+	</beans:bean>
+	     
+</beans:beans>
