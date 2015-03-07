@@ -34,7 +34,7 @@ public class CategoryDetailsManager implements AbstractManager {
         CategoryDetailsManager.initLogger();
     }	// end static
 
-    @Autowired    
+    @Autowired
     private AbstractDao categoryDetailsDao;
     @Autowired
     private AbstractDao categoryDao;
@@ -54,32 +54,32 @@ public class CategoryDetailsManager implements AbstractManager {
 
     public void setCategoryDao(AbstractDao dao) {
         CategoryDetailsManager.logger.debug(new Date() + " public void setCategorydao(AbstractDao dao) {}");
-        
-        this.categoryDao = dao;        
+
+        this.categoryDao = dao;
     }   // end public void setCategorydao(AbstractDao dao) {}
-    
+
     public void setItemDao(AbstractDao dao) {
         CategoryDetailsManager.logger.debug(new Date() + " public void setItemDao(AbstractDao dao) {}");
-        
+
         this.itemDao = dao;
     }   // end public void setItemDao(AbstractDao dao) {}
-    
+
     @Override
     public List<CategoryDetails> getAllEntities() {
         List<CategoryDetails> categoryDetails = this.categoryDetailsDao.getAllEntities();
 
         return categoryDetails;
     }	// end public List<Item> getAllEntities() {}
-    
+
     public List<CategoryDetails> getAllCategoryDetails() {
         List<CategoryDetails> categoryDetails = new ArrayList<CategoryDetails>();
         List<Item> items = this.itemDao.getAllEntities();
-        
+
         for (Item item : items) {
-            CategoryDetails categoryDetail = ((JdbcCategoryDetailsDao)categoryDetailsDao).getCategoryDetailsByItem(item);
+            CategoryDetails categoryDetail = ((JdbcCategoryDetailsDao) categoryDetailsDao).getCategoryDetailsByItem(item);
             categoryDetails.add(categoryDetail);
         }   // end for
-        
+
         return categoryDetails;
     }   // end public List<CategoryDetails> getAllCategoryDetails() {}
 
@@ -92,23 +92,66 @@ public class CategoryDetailsManager implements AbstractManager {
     public CategoryDetails getNewEntity() {
         return new CategoryDetails();
     }
-    
+
     public CategoryDetails getNewEntity(SimpleItemAdder itemAdder) {
-        
-        CategoryDetails cd = new CategoryDetails();        
-        cd.setItem(itemAdder.getItem());   
+
+        CategoryDetails cd = new CategoryDetails();
+        cd.setItem(itemAdder.getItem());
         List<Category> categories = new ArrayList<Category>();
         cd.setCategories(categories);
-        
-        for (int id : itemAdder.getCategories()) {
-            cd.getCategories().add((Category)this.categoryDao.getEntityById(id));            
+
+        if (itemAdder.getCategories() != null) {
+            for (int id : itemAdder.getCategories()) {
+                cd.getCategories().add((Category) this.categoryDao.getEntityById(id));
+            }
         }
-        
+
         return cd;
     }
 
     @Override
     public <T> T getEntityById(int id) {
+        return this.categoryDetailsDao.getEntityById(id);
+    }
+
+    public CategoryDetails getCategoryDetailsByItem(Item item) {
+        return ((JdbcCategoryDetailsDao) this.categoryDetailsDao).getCategoryDetailsByItem(item);
+    }
+
+    public List<Category> getCategoriesByItem(String itemName) {
+        return ((JdbcCategoryDetailsDao) this.categoryDetailsDao).getCategoriesByItemName(itemName);
+    }
+
+    @Override
+    public <T> int updateEntity(T entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public int updateCategoriesForItem(List<Category> newCategories, CategoryDetails cd) {
+        if (cd != null && cd.getCategories() != null) {
+            ((JdbcCategoryDetailsDao)(categoryDetailsDao)).deleteCategoriesForItem(cd.getItem());
+        }
+        
+        if (newCategories != null && newCategories.isEmpty()) {
+            return ((JdbcCategoryDetailsDao)(categoryDetailsDao)).insertCategoryDetailsForItem(newCategories, cd.getItem());
+        }
+        
+        return -1;
+    }
+
+    public int updateCategoriesForItem(int[] newCategoryIds, CategoryDetails cd) {
+        if (cd.getCategories() != null) {
+            ((JdbcCategoryDetailsDao)(categoryDetailsDao)).deleteCategoriesForItem(cd.getItem());
+        }
+        
+        if (newCategoryIds != null && newCategoryIds.length != 0) {
+            return ((JdbcCategoryDetailsDao)(categoryDetailsDao)).insertCategoryDetailsForItem(newCategoryIds, cd.getItem());
+        }
+        
+        return -1;
+    }
+    
+    public int deleteCategoriesForItem(CategoryDetails cd) {
+        return this.updateCategoriesForItem(new ArrayList<Category>(), cd);
     }
 }   // end public class CategoryDetailsManager implements AbstractManager {}

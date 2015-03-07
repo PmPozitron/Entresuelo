@@ -109,7 +109,7 @@ public class JdbcCategoryDetailsDao extends JdbcTemplate implements AbstractDao 
     }	// end public <T> void updateEntity(int idToUpdate, T updatedEntity) {}
 
     @Override
-    public void deleteEntity(int idToDelete) {
+    public int deleteEntity(int idToDelete) {
         JdbcCategoryDetailsDao.logger.debug(new Date() + " public void deleteEntity(int idToDelete) {}");
 		
 	throw new UnsupportedOperationException();
@@ -136,11 +136,39 @@ public class JdbcCategoryDetailsDao extends JdbcTemplate implements AbstractDao 
     @Override
     public CategoryDetails getEntityById(int id) {
         JdbcCategoryDetailsDao.logger.debug(new Date() + " public Item getEntityById(int id) {}");
-//        CategoryDetails categoryDetails = (CategoryDetails)super.query(AbstractDao.SELECT_FROM_CATEGORY_DETAILS + " WHERE i.id = " + id + ";", 
-//                new CategoryDetailsExtractor());
-//
-//        return categoryDetails;
+        List<CategoryDetails> categoryDetails = (List<CategoryDetails>)super.query(AbstractDao.SELECT_FROM_CATEGORY_DETAILS + " WHERE cd.item_id = " + id + ";", 
+                new CategoryDetailsExtractor());
+
+        if (categoryDetails.size() == 0) {
+            return new CategoryDetails();
+        }
+        return categoryDetails.get(0);
         
-        throw  new UnsupportedOperationException("JdbcCategoryDetailsDao.getEntityById() - don't see any sense in this method here, 28/02/2015");
+//        throw  new UnsupportedOperationException("JdbcCategoryDetailsDao.getEntityById() - don't see any sense in this method here, 28/02/2015");
     }   // end public Item getEntityById(int id) {}
+
+    @Override
+    public <T> int updateEntity(T updatedEntity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public int deleteCategoriesForItem(Item item) {
+        return super.update(AbstractDao.DELETE_FROM_CATEGORY_DETAILS + " WHERE item_id = " + item.getId());
+    }
+    
+    public int insertCategoryDetailsForItem(List<Category> categories, Item item) {
+        int count = 0;
+        for (Category cat : categories) {
+            count += super.update(AbstractDao.INSERT_INTO_CATEGORY_DETAILS + "(" + item.getId() + ", " + cat.getId() + ")");
+        }
+        return count;
+    }
+
+    public int insertCategoryDetailsForItem(int[] categoryIds, Item item) {
+        int count = 0;
+        for (int cat : categoryIds) {
+            count += super.update(AbstractDao.INSERT_INTO_CATEGORY_DETAILS + "(" + item.getId() + ", " + cat + ")");
+        }
+        return count;
+    }
 }   // end public class CategoryDao extends SimpleJdbcDaoSupport implements AbstractDao {}

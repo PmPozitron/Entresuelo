@@ -107,4 +107,40 @@ public class Item implements Serializable {
 		
 		return this.location;
 	}	// end public String getLocation(){}
+        
+        @Override
+        public boolean equals(Object o) {
+            
+            if (this == null && o == null) {
+                return true;
+            }
+                                    
+            if (    (this == null && o != null) ||
+                    (this != null && o == null)) {
+                return false;
+            }
+            
+            Item item = (Item) o;
+            
+            if (    this.getId() != item.getId() ||
+                    this.getLocationId() != item.getLocationId() ||
+                    !this.getName().equals(item.getName()) ||
+                    !this.getDescription().equals(item.getDescription())    ) {
+                
+                return false;
+            }
+            
+            return true;
+        }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 11 * hash + this.id;
+        hash = 11 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 11 * hash + (this.description != null ? this.description.hashCode() : 0);
+        hash = 11 * hash + this.locationId;
+        
+        return hash;
+    }
 }	// end public class Location implements Serializable {}

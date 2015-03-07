@@ -67,6 +67,15 @@ public class ItemManager implements AbstractManager {
     public <T> T getEntityById(int id) {
         return this.itemDao.getEntityById(id);
     }
+
+    @Override
+    public <T> int updateEntity(T entity) {
+        return this.itemDao.updateEntity(entity);
+    }
+    
+    public int deleteItem(Item item) {
+        return this.itemDao.deleteEntity(item.getId());
+    }
     
     
 

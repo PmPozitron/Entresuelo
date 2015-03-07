@@ -99,11 +99,18 @@ public class JdbcInventoryDetailsDao extends JdbcTemplate implements AbstractDao
         JdbcInventoryDetailsDao.logger.debug(new Date() + " public <T> int addNewEntity(T newEntity) {}");
 
         int count = 0;
-        for (Item item : ((InventoryDetails)newEntity).getInventory()) {
-            super.update(AbstractDao.INSERT_INTO_INVENTORY_DETAILS + "(" + ((InventoryDetails)newEntity).getContainer().getId() + "," + item.getId() + ")");
-            count ++;
+        for (Item item : ((InventoryDetails) newEntity).getInventory()) {
+            super.update(AbstractDao.INSERT_INTO_INVENTORY_DETAILS + "(" + ((InventoryDetails) newEntity).getContainer().getId() + "," + item.getId() + ")");
+            count++;
         }
-        return count;      
+        return count;
+    }	// end public <T> int addNewEntity(T newEntity) {} 
+
+    public <T> int addNewEntity(int containerId, int itemId) {
+        JdbcInventoryDetailsDao.logger.debug(new Date() + " public <T> int addNewEntity(int containerId, int itemId) {}");     
+        
+        return super.update(AbstractDao.INSERT_INTO_INVENTORY_DETAILS + "(" + containerId + "," + itemId + ")");               
+        
     }	// end public <T> int addNewEntity(T newEntity) {} 
 
     @Override
@@ -114,41 +121,97 @@ public class JdbcInventoryDetailsDao extends JdbcTemplate implements AbstractDao
     }	// end public <T> void updateEntity(int idToUpdate, T updatedEntity) {}
 
     @Override
-    public void deleteEntity(int idToDelete) {
+    public int deleteEntity(int idToDelete) {
         JdbcInventoryDetailsDao.logger.debug(new Date() + " public void deleteEntity(int idToDelete) {}");
 
         throw new UnsupportedOperationException();
     }	// end public void deleteEntity(int idToDelete) {}
-
-//  07/12/14: Добавляю этот метод ради ухода от исп-ия InventoryDetailsExtractor    
-    public List<Item> getInventoryByContainerName(String containerName) {
+    
+    public int deleteInventoryDetail(Item container, Item item) {
+        return super.update(AbstractDao.DELETE_FROM_INVENTORY_DETAILS + " WHERE item_holder_id = " + container.getId() + " AND stored_item_id = " + item.getId());
+    }
+ 
+    public int deleteInventoryDetail(int containerId, int itemId) {
+        return super.update(AbstractDao.DELETE_FROM_INVENTORY_DETAILS + " WHERE item_holder_id = " + containerId + " AND stored_item_id = " + itemId);
+    }
+    
+    public int insertInventoryDetail(Item container, Item item) {
+                
+        return super.update(AbstractDao.INSERT_INTO_INVENTORY_DETAILS + "(" + (container.getId() + "," + item.getId() + ")"));
+    }
+ 
+    public List<InventoryDetails> getInventoryByContainerName(String containerName) {
         JdbcInventoryDetailsDao.logger.debug(new Date() + " public List <Item> getInventoryByContainerName(String containerName) {}");
 
-        List<Item> inventory = (List<Item>) super.query(AbstractDao.SELECT_FROM_INVENTORY_DETAILS + " WHERE ih.name = '" + containerName + "';", new ItemMapper());
+        List<InventoryDetails> inventory = (List<InventoryDetails>) super.query(AbstractDao.SELECT_FROM_INVENTORY_DETAILS + " WHERE ih.name = '" + containerName + "';",
+                new InventoryDetailsExtractor());
 
         return inventory;
     }   // end public List <Item> getInventoryByContainerName(String containerName) {}
 
+    public Item getContainerByItem(Item item) {
+        JdbcInventoryDetailsDao.logger.debug(new Date() + " public InventoryDetails getContainerByItem(Item item) {}");
+
+        List<InventoryDetails> containers = (List<InventoryDetails>) super.query(AbstractDao.SELECT_FROM_INVENTORY_DETAILS + " WHERE i.id = " + item.getId() + ";",
+                new InventoryDetailsExtractor());
+
+        if (containers.size() > 0) {
+            return containers.get(0).getContainer();
+
+        } else {
+            return null;
+        }
+    }
+
 //  11/01/15: it seems to be more suitable to return from this object not List<Item>, 
 //  but InventoryDetails. after all this is InventoryDetailsDAO, not ItemDAO...
+//  TODO: 07 march 2015 - as this method returns InventoryDetails with new container object (this can be seen in debug) 
+//  it seems better to exclude InventoryDetails extractor mechanizm and use ItemMapper instead    
     public InventoryDetails getInventoryDetailsByContainer(Item container) {
         JdbcInventoryDetailsDao.logger.debug(new Date() + " public InventoryDetails getInventoryDetailsByContainerName(String containerName) {}");
 
-        List<Item> items = this.getInventoryByContainerName(container.getName());
-        InventoryDetails inventory = new InventoryDetails(container, items);
-
-        return inventory;
+        List<Item> items = super.query(AbstractDao.SELECT_FROM_INVENTORY_DETAILS + " WHERE id.item_holder_id = " + container.getId() + ";", new ItemMapper());      
+        
+        return new InventoryDetails(container, items);
     }   // end public InventoryDetails getInventoryDetailsByContainerName(String containerName) {}
 
     @Override
     public Item getEntityById(int id) {
         JdbcInventoryDetailsDao.logger.debug(new Date() + " public Item getEntityById(int id) {}");
-//        List<Item> items = super.query(AbstractDao.SELECT_FROM_ITEMS + " WHERE i.id = " + id + ";", new ItemMapper());
-//
-//        if (items.size() > 1) {
-//            throw new IllegalStateException(new Date() + " " + this.getClass().getName() + " more than one result for 'byId' query");
-//        }
-//        return items.get(0);
-        throw new UnsupportedOperationException("JdbcInventoryDetailsDao.getEntityById() - don't see any sense in this method here, 28/02/2015");
+        List<Item> items = super.query(AbstractDao.SELECT_FROM_INVENTORY_DETAILS + " WHERE id.item_holder_id = " + id + ";", new ItemMapper());
+
+        if (items.size() > 1) {
+            throw new IllegalStateException(new Date() + " " + this.getClass().getName() + " more than one result for 'byId' query");
+        }
+        
+        if (items.size() == 1) {
+            return items.get(0);    // TODO wtf does this method do ?
+        }
+        
+        return null;
+        
+//        throw new UnsupportedOperationException("JdbcInventoryDetailsDao.getEntityById() - don't see any sense in this method here, 28/02/2015");
     }   // end public Item getEntityById(int id) {}
+
+    @Override
+    public <T> int updateEntity(T updatedEntity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public int updateContainerForItem(int oldContainerId, int newContainerId, int itemId) {
+        
+        if (oldContainerId != -1 && oldContainerId != 0) {
+            this.deleteInventoryDetail(oldContainerId, itemId);
+        }
+
+        if (newContainerId != -1 && newContainerId != 0) {
+            return this.addNewEntity(newContainerId, itemId);
+        }
+        
+        return -1;
+    }
+    
+    public int deleteInventoryDetailsForItem(Item item) {
+        return super.update(AbstractDao.DELETE_FROM_INVENTORY_DETAILS + " WHERE item_holder_id = " + item.getId() + " OR stored_item_id = " + item.getId());
+    }
 }   // end public class JdbcInventoryDetailsDao extends JdbcTemplate implements AbstractDao {}

@@ -59,11 +59,21 @@ public interface AbstractDao {
             "INSERT INTO entresuelo.inventory_details (item_holder_id, stored_item_id) "
             + "VALUES ";
     
+    String UPDATE_ITEM = 
+            "UPDATE entresuelo.item SET ";
+    
+    String DELETE_FROM_INVENTORY_DETAILS = 
+            "DELETE FROM entresuelo.inventory_details ";       
+
+    String DELETE_FROM_CATEGORY_DETAILS = 
+            "DELETE FROM entresuelo.categories_details ";       
+    
     <T> List <T> getAllEntities();
     <T> List<T> getEntityByName(String name);
     <T> T getEntityById(int id);
     <T> int addNewEntity(T newEntity);
     <T> void updateEntity(int idToUpdate, T updatedEntity);
-    void deleteEntity(int idToDelete);
+    <T> int updateEntity(T updatedEntity);
+    int deleteEntity(int idToDelete);    
 
 }   // end public interface AbstractDao {}

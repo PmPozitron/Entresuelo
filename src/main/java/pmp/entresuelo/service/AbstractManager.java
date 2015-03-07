@@ -21,5 +21,7 @@ public interface AbstractManager extends Serializable {
         <T> int addNewEntity(T newEntity);
         
         <T> T getNewEntity();
+        
+        <T> int updateEntity(T entity);
 
 }	// end public interface AbstractManager extends Serializable {

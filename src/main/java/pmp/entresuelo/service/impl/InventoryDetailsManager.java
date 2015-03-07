@@ -93,7 +93,11 @@ public class InventoryDetailsManager implements AbstractManager {
     public InventoryDetails getNewEntity(SimpleItemAdder itemAdder) {
 
         InventoryDetails id = new InventoryDetails();
-        id.setContainer((Item)this.itemDao.getEntityById(itemAdder.getContainerId()));
+//        id.setContainer((Item)this.itemDao.getEntityById(itemAdder.getContainerId()));
+        id.setContainer((itemAdder.getContainerId() == -1 || itemAdder.getContainerId() == 0) 
+                ? null : ((Item)this.itemDao.getEntityById(itemAdder.getContainerId()))
+        );
+        
         List <Item> inventory = new ArrayList<Item>();
         id.setInventory(inventory);
         id.getInventory().add(itemAdder.getItem());
@@ -103,7 +107,27 @@ public class InventoryDetailsManager implements AbstractManager {
 
     @Override
     public <T> T getEntityById(int id) {
+        return this.inventoryDetailsDao.getEntityById(id);
+    }
+    
+    public InventoryDetails getInventoryDetailsByContainer(Item container) {
+        return ((JdbcInventoryDetailsDao)this.inventoryDetailsDao).getInventoryDetailsByContainer(container);
+    }
+    
+     public Item getContainerByItem(Item item) {
+         return ((JdbcInventoryDetailsDao)this.inventoryDetailsDao).getContainerByItem(item);         
+     }
+
+    @Override
+    public <T> int updateEntity(T entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    public int updateContainerForItem(int oldContainerId, int newContainerId, int itemId) {
+        return ((JdbcInventoryDetailsDao)inventoryDetailsDao).updateContainerForItem(oldContainerId, newContainerId, itemId);
+    }
+    
+    public int deleteInventoryDetailsForItem(Item item) {
+        return ((JdbcInventoryDetailsDao)inventoryDetailsDao).deleteInventoryDetailsForItem(item);
+    }
 }	// end public class InventoryDetailsManager implements AbstractManager {}

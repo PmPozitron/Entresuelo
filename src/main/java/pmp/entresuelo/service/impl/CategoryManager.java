@@ -69,4 +69,9 @@ public class CategoryManager implements AbstractManager {
         return categoryDao.getEntityById(id);
     }
 
+    @Override
+    public <T> int updateEntity(T entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }	// end public class CategoryManager implements AbstractManager {}

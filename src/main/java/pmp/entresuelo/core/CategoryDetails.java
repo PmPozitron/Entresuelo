@@ -57,7 +57,6 @@ public class CategoryDetails implements Serializable {
 //	public void setCategoryIds(int [] categoryIds) {
 //	this.cateroryIds = categoryIds;
 //	}	// end public void setCategoryIds(int [] categoryIds) {}
-    
     public void setCategories(List<Category> categories) {
         this.categories = categories;
     }	// end public void setCategories(Map<Integer, String> categories) {}
@@ -82,4 +81,37 @@ public class CategoryDetails implements Serializable {
 
         return builder.toString();
     }	// end public String toString() {}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == null && o == null) {
+            return true;
+        }
+
+        if ((this == null && o != null)
+                || (this != null && o == null)) {
+            return false;
+        }
+
+        CategoryDetails cd = (CategoryDetails) o;
+        
+        if (!this.getItem().equals(cd.getItem())) {
+            return false;
+        }
+        
+        for (Category thisCategory : this.getCategories()) {
+            for (Category cdCategory : cd.getCategories()) {
+                if (!thisCategory.equals(cdCategory)) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+
+    @Override
+    public int hashCode() {        
+        return this.item.hashCode() + this.categories.get(0).hashCode();
+    }
 }	// end public class CategoryDetails {}

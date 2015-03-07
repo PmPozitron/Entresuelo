@@ -27,7 +27,7 @@ public class SimpleItemAdder {
         this();
         this.setItem(item);
         this.setContainerId(containerId);
-        this.setCategories(categories);
+        this.setCategories(categoryIds);
     }
     
     public Item getItem() {

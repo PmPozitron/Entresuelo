@@ -96,10 +96,10 @@ public class JdbcCategoryDao extends JdbcTemplate implements AbstractDao {
     }   // end public <T> void updateEntity(int idToUpdate, T updatedEntity) {}
 
     @Override
-    public void deleteEntity(int idToDelete) {
+    public int deleteEntity(int idToDelete) {
         JdbcCategoryDao.logger.debug(new Date() + " public void deleteEntity(int idToDelete) {}");
 
-        super.update("DELETE FROM entresuelo.category WHERE id = :id",
+        return super.update("DELETE FROM entresuelo.category WHERE id = :id",
                 new CategoryMapper(), new MapSqlParameterSource().addValue("id", idToDelete));
     }	// end public void deleteEntity(int idToDelete) {}
 
@@ -113,4 +113,9 @@ public class JdbcCategoryDao extends JdbcTemplate implements AbstractDao {
         }
         return categories.get(0);
     }   // end public Item getEntityById(int id) {}
+
+    @Override
+    public <T> int updateEntity(T updatedEntity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }   // end public class CategoryDao extends SimpleJdbcDaoSupport implements AbstractDao {}

@@ -77,4 +77,40 @@ public class Category implements Serializable {
 
         return this.description;
     }	// end public String getDescription() {}
+    
+    @Override
+    public String toString() {
+        return this.getName();
+    }
+    
+    @Override
+    public boolean equals (Object o) {
+        if (this == null && o == null) {
+            return true;
+        }
+        
+        if ((this == null && o != null) ||
+                (this != null && o == null)) {
+            return false;
+        }
+        
+        Category cat = (Category) o;
+        
+        if (this.getId() != cat.getId() || 
+                !this.getName().equals(cat.getName()) || 
+                !this.getDescription().equals(cat.getDescription())) {
+            return false;
+        }
+        
+        return true;    
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + this.id;
+        hash = 97 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 97 * hash + (this.description != null ? this.description.hashCode() : 0);
+        return hash;
+    }
 }   // end public class Location implements Serializable {}

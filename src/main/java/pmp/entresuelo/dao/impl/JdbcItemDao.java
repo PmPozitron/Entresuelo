@@ -95,10 +95,10 @@ public class JdbcItemDao extends JdbcTemplate implements AbstractDao {
     }	// end public <T> void updateEntity(int idToUpdate, T updatedEntity) {}
 
     @Override
-    public void deleteEntity(int idToDelete) {
+    public int deleteEntity(int idToDelete) {
         JdbcItemDao.logger.debug(new Date() + " public void deleteEntity(int idToDelete) {}");
-        super.update("DELETE FROM entresuelo.item WHERE id = :id",
-                new ItemMapper(), new MapSqlParameterSource().addValue("id", idToDelete));
+        
+        return super.update("DELETE FROM entresuelo.item WHERE id = " + idToDelete);
     }	// end public void deleteEntity(int idToDelete) {}
 
     @Override
@@ -109,6 +109,20 @@ public class JdbcItemDao extends JdbcTemplate implements AbstractDao {
         if (items.size() > 1) {
             throw new IllegalStateException(new Date() + " " + this.getClass().getName() + " more than one result for 'byId' query");
         }
+        
+        if (items.size() == 0) {
+            return new Item();
+        }
+        
         return items.get(0);
     }   // end public Item getEntityById(int id) {}
+
+    @Override
+    public <T> int updateEntity(T updatedEntity) {
+        Item item = (Item)updatedEntity;
+        int count = super.update(AbstractDao.UPDATE_ITEM + " name = '" + item.getName() 
+                                + "', description = '" + item.getDescription() + "', location_id = " + item.getLocationId() + " WHERE id = " + item.getId());
+        
+        return count;
+    }
 }   // end public class LocationDao extends SimpleJdbcDaoSupport implements AbstractDao {}
