@@ -30,23 +30,23 @@ import pmp.entresuelo.dao.ResultSetProcessors.LocationMapper;
 //@Component("locationDao")
 public class JdbcLocationDao extends JdbcTemplate implements AbstractDao {
     private static final Logger logger = Logger.getLogger(JdbcLocationDao.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender (new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-	
-    private static void initLogger () {
-        JdbcLocationDao.logger.addAppender(JdbcLocationDao.consoleLog);
-	JdbcLocationDao.logger.setLevel(Level.ALL);
-		
-        JdbcLocationDao.logger.debug(new Date() + " private static void initLogger () {}");
-    }	// end private static void initLogger () {}
-	
-    static {
-	JdbcLocationDao.initLogger();
-    }	// end static
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender (new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
+//	
+//    private static void initLogger () {
+//        JdbcLocationDao.logger.addAppender(JdbcLocationDao.consoleLog);
+//	JdbcLocationDao.logger.setLevel(Level.ALL);
+//		
+//        JdbcLocationDao.logger.debug(new Date() + " private static void initLogger () {}");
+//    }	// end private static void initLogger () {}
+//	
+//    static {
+//	JdbcLocationDao.initLogger();
+//    }	// end static
 	
     public JdbcLocationDao () {
         super();
 //	JdbcLocationDao.initLogger();
-	JdbcLocationDao.logger.debug(new Date() + " public JdbcLocationDao () {}");		
+	JdbcLocationDao.logger.debug(new Date() + " testing updated message public JdbcLocationDao () {}");		
     }	// end public JdbcLocationDao () {}
 
 //    @Autowired
@@ -81,6 +81,7 @@ public class JdbcLocationDao extends JdbcTemplate implements AbstractDao {
 
     }	// end public <T> int addNewEntity(T newEntity) {} 
 
+    @Deprecated // there's some bug in spring 3.2.8 jdbc for which sqlparams binding isn't working. or may be it is some mine bug
     @Override
     public <T> void updateEntity(int idToUpdate, T updatedEntity) {
         JdbcLocationDao.logger.debug(new Date() + " public <T> void updateEntity(int idToUpdate, T updatedEntity) {}");
@@ -95,8 +96,7 @@ public class JdbcLocationDao extends JdbcTemplate implements AbstractDao {
     public int deleteEntity(int idToDelete) {
 	JdbcLocationDao.logger.debug(new Date() + " public void deleteEntity(int idToDelete) {}");
 		
-	return super.update("DELETE FROM entresuelo.location WHERE id = :id", 
-                new LocationMapper(), new MapSqlParameterSource().addValue("id", idToDelete));
+	return super.update(AbstractDao.DELETE_LOCATION + " WHERE id = " + idToDelete);       
     }	// end public void deleteEntity(int idToDelete) {}
 
     @Override
@@ -117,6 +117,9 @@ public class JdbcLocationDao extends JdbcTemplate implements AbstractDao {
 
     @Override
     public <T> int updateEntity(T updatedEntity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Location location = (Location)updatedEntity;
+        
+        return super.update(AbstractDao.UPDATE_LOCATION + " name = '" + location.getName() 
+                + "', description = '" + location.getDescription() + "' WHERE id = " + location.getId());
     }
 }   // end public class LocationDao extends SimpleJdbcDaoSupport implements AbstractDao {}

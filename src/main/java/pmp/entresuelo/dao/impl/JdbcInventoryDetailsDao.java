@@ -38,18 +38,18 @@ import pmp.entresuelo.dao.ResultSetProcessors.ItemMapper;
 public class JdbcInventoryDetailsDao extends JdbcTemplate implements AbstractDao {
 
     private static final Logger logger = Logger.getLogger(JdbcInventoryDetailsDao.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-
-    private static void initLogger() {
-        JdbcInventoryDetailsDao.logger.addAppender(JdbcInventoryDetailsDao.consoleLog);
-        JdbcInventoryDetailsDao.logger.setLevel(Level.ALL);
-
-        JdbcInventoryDetailsDao.logger.debug(new Date() + " private static void initLogger () {}");
-    }	// end private static void initLogger () {}
-
-    static {
-        JdbcInventoryDetailsDao.initLogger();
-    }	// end static
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
+//
+//    private static void initLogger() {
+//        JdbcInventoryDetailsDao.logger.addAppender(JdbcInventoryDetailsDao.consoleLog);
+//        JdbcInventoryDetailsDao.logger.setLevel(Level.ALL);
+//
+//        JdbcInventoryDetailsDao.logger.debug(new Date() + " private static void initLogger () {}");
+//    }	// end private static void initLogger () {}
+//
+//    static {
+//        JdbcInventoryDetailsDao.initLogger();
+//    }	// end static
 
 //    @Autowired
 //    DataSource dataSource;
@@ -65,7 +65,7 @@ public class JdbcInventoryDetailsDao extends JdbcTemplate implements AbstractDao
 
     public JdbcInventoryDetailsDao() {
         super();
-        JdbcInventoryDetailsDao.logger.debug(new Date() + " public JdbcInventoryDetailsDao () {}");
+        JdbcInventoryDetailsDao.logger.debug(new Date() + " testing updated message public JdbcInventoryDetailsDao () {}");
     }	// end public JdbcInventoryDetailsDao () {}
 
 //  так как InventoryDetails - это характеристика Item, то данный метод требует на вход имя Item, для которого нужно найти данные.

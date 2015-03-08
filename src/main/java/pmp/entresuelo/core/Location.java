@@ -11,18 +11,18 @@ import org.apache.log4j.SimpleLayout;
 public class Location implements Serializable {
 
     private static final Logger logger = Logger.getLogger(Location.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_ERR);
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_ERR);
 
-    private static void initLogger() {
-        Location.logger.addAppender(Location.consoleLog);
-        Location.logger.setLevel(Level.ALL);
-
-        Location.logger.debug(new Date() + " private static void initLogger() {}");
-    }	// end private static void initLogger() {}
-
-    static {
-        Location.initLogger();
-    }	// end static
+//    private static void initLogger() {
+//        Location.logger.addAppender(Location.consoleLog);
+//        Location.logger.setLevel(Level.ALL);
+//
+//        Location.logger.debug(new Date() + " private static void initLogger() {}");
+//    }	// end private static void initLogger() {}
+//
+//    static {
+//        Location.initLogger();
+//    }	// end static
 
     private int id;
     private String name;
@@ -35,7 +35,7 @@ public class Location implements Serializable {
 
     public Location(int id, String name, String description) {
 //	Location.initLogger();
-        Location.logger.debug(new Date() + " public Location (int id, String name, String description) {}");
+        Location.logger.debug(new Date() + " testing updated message public Location (int id, String name, String description) {}");
 
         this.id = id;
         this.name = name;
@@ -77,4 +77,34 @@ public class Location implements Serializable {
 
         return this.description;
     }	// end public String getDescription() {}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == null && o == null) {
+            return true;
+        }
+
+        if ((this == null && o != null)
+                || (this != null && o == null)) {
+            return false;
+        }
+
+        Location loc = (Location) o;
+
+        if (this.getId() != loc.getId()
+                || !this.getName().equals(loc.getName())
+                || !this.getDescription().equals(loc.getDescription())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 73 * hash + this.id;
+        hash = 73 * hash + (this.name != null ? this.name.hashCode() : 0);
+        return hash;
+    }
 }   // end public class Location implements Serializable {}

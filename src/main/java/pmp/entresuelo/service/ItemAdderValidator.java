@@ -12,12 +12,16 @@ import org.springframework.validation.Validator;
 import pmp.entresuelo.core.Item;
 import pmp.entresuelo.core.ItemAdder;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author Pozitron
  */
 //@Component ("itemAdderValidator")
 public class ItemAdderValidator implements Validator {
+    
+    private final static Logger logger = Logger.getLogger(ItemAdderValidator.class);
 
     @Override
     public boolean supports(Class<?> clazz) {

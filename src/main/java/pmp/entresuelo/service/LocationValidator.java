@@ -24,18 +24,18 @@ import pmp.entresuelo.core.Location;
 public class LocationValidator implements Validator {
 
     private static Logger logger = Logger.getLogger(LocationValidator.class);
-    private static ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_ERR);
-
-    private static void initLogger() {
-        LocationValidator.logger.addAppender(LocationValidator.consoleLog);
-        LocationValidator.logger.setLevel(Level.ALL);
-
-        LocationValidator.logger.debug(new Date() + " LocationValidator.initLogger() {}");
-    }   // end private static void initLogger() {}
-
-    static {
-        LocationValidator.initLogger();
-    }   // end static
+//    private static ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_ERR);
+//
+//    private static void initLogger() {
+//        LocationValidator.logger.addAppender(LocationValidator.consoleLog);
+//        LocationValidator.logger.setLevel(Level.ALL);
+//
+//        LocationValidator.logger.debug(new Date() + " LocationValidator.initLogger() {}");
+//    }   // end private static void initLogger() {}
+//
+//    static {
+//        LocationValidator.initLogger();
+//    }   // end static
 
     @Override
     public boolean supports(Class<?> clazz) {

@@ -35,10 +35,41 @@ ToDo:
     категори дитейлс и инвентори дитейлс успешно сохраняются в БД при сохранении айтема с соот-щей формы;
     надо сделать update + delete - видимо, форму для просмотра деталей с кнопкой для активации режима редактирования;
 
-08/03/2015:
+07/03/2015:
     доделан функционал редактирования и удаления айтемов (вместе со всеми дитейлс);
 
     в следующий раз:
         доделать редактирование и удаление локациям и категориям;
         запихнуть все операции по обработке айтема с его дитейлс в транзакции;
-            
+
+08/03/2015:
+    майэскуэль воркбенчем добавлены unique ограничения к полю name в таблицах item, location, category;
+    сделано удаление локаций (просто делит фром, без проверки используемости, т.е. используемую локацию удалить нельзя);
+    сделано удаление категорий (просто делит фром, без проверки используемости, т.е. используемую категорию удалить нельзя);
+    логгер переделан на log4j.properties конфигурацию, надо будет обновить путь до файла с логом так,
+    что бы он указывал не на каталина хоум, а на папке, где именно расмещено приложение.
+    это важно при in place deployment, когда приложение диплоится внутри своей же папки target.
+============================================================================================================================================    
+    http://stackoverflow.com/questions/216781/log4j-configuring-a-web-app-to-use-a-relative-path
+    done it in this way.
+
+        Added a ServletContextListener that does the following:
+
+        public void contextInitialized(ServletContextEvent event) {
+                ServletContext context = event.getServletContext();
+                System.setProperty("rootPath", context.getRealPath("/"));
+        }
+
+        Then in the log4j.properties file:
+
+        log4j.appender.file.File=${rootPath}WEB-INF/logs/MyLog.log
+
+        By doing it in this way Log4j will write into the right folder as long as you 
+        don't use it before the "rootPath" system property has been set. 
+        This means that you cannot use it from the ServletContextListener itself 
+        but you should be able to use it from anywhere else in the app.
+
+        It should work on every web container and OS as it's not dependent on a container specific 
+        system property and it's not affected by OS specific path issues. 
+        Tested with Tomcat and Orion web containers and on Windows and Linux and it works fine so far.
+============================================================================================================================================            

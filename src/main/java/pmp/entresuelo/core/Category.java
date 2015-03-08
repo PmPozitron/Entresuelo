@@ -11,18 +11,18 @@ import org.apache.log4j.SimpleLayout;
 public class Category implements Serializable {
 
     private static final Logger logger = Logger.getLogger(Category.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_ERR);
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_ERR);
 
-    private static void initLogger() {
-        Category.logger.addAppender(Category.consoleLog);
-        Category.logger.setLevel(Level.ALL);
+//    private static void initLogger() {
+//        Category.logger.addAppender(Category.consoleLog);
+//        Category.logger.setLevel(Level.ALL);
+//
+//        Category.logger.debug(new Date() + " private static void initLogger() {}");
+//    }	// end private static void initLogger() {}
 
-        Category.logger.debug(new Date() + " private static void initLogger() {}");
-    }	// end private static void initLogger() {}
-
-    static {
-        Category.initLogger();
-    }	// end static
+//    static {
+//        Category.initLogger();
+//    }	// end static
 
     private int id;
     private String name;
@@ -35,7 +35,7 @@ public class Category implements Serializable {
 
     public Category(int id, String name, String description) {
 //		Category.initLogger();
-        Category.logger.debug(new Date() + " public Category (int id, String name, String description) {}");
+        Category.logger.debug(new Date() + " testing updated message public Category (int id, String name, String description) {}");
 
         this.id = id;
         this.name = name;

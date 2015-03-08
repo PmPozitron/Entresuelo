@@ -13,12 +13,16 @@ import pmp.entresuelo.core.Item;
 import pmp.entresuelo.core.ItemAdder;
 import pmp.entresuelo.core.SimpleItemAdder;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author Pozitron
  */
 @Component ("itemAdderValidator")
 public class SimpleItemAdderValidator implements Validator {
+    
+    private final static Logger logger = Logger.getLogger(SimpleItemAdderValidator.class);
 
     @Override
     public boolean supports(Class<?> clazz) {

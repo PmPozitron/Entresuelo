@@ -31,18 +31,18 @@ import pmp.entresuelo.dao.ResultSetProcessors.ItemMapper;
 public class JdbcCategoryDao extends JdbcTemplate implements AbstractDao {
 
     private static final Logger logger = Logger.getLogger(JdbcCategoryDao.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
 
-    private static void initLogger() {
-        JdbcCategoryDao.logger.addAppender(JdbcCategoryDao.consoleLog);
-        JdbcCategoryDao.logger.setLevel(Level.ALL);
-
-        JdbcCategoryDao.logger.debug(new Date() + " private static void initLogger () {}");
-    }	// end private static void initLogger () {}
-
-    static {
-        JdbcCategoryDao.initLogger();
-    }	// end static
+//    private static void initLogger() {
+//        JdbcCategoryDao.logger.addAppender(JdbcCategoryDao.consoleLog);
+//        JdbcCategoryDao.logger.setLevel(Level.ALL);
+//
+//        JdbcCategoryDao.logger.debug(new Date() + " private static void initLogger () {}");
+//    }	// end private static void initLogger () {}
+//
+//    static {
+//        JdbcCategoryDao.initLogger();
+//    }	// end static
     
 //    @Autowired
 //    private DataSource dataSource;
@@ -59,7 +59,7 @@ public class JdbcCategoryDao extends JdbcTemplate implements AbstractDao {
 
     @Override
     public List<Category> getEntityByName(String name) {
-        JdbcCategoryDao.logger.debug(new Date() + " public Category getEntityByName(String name) {}");
+        JdbcCategoryDao.logger.debug(new Date() + " testing updated message public Category getEntityByName(String name) {}");
 
         List<Category> categories = super.query(AbstractDao.SELECT_FROM_CATEGORIES + " WHERE name = '" + name + "';",
                 new CategoryMapper(), new MapSqlParameterSource().addValue("name", name));
@@ -99,8 +99,7 @@ public class JdbcCategoryDao extends JdbcTemplate implements AbstractDao {
     public int deleteEntity(int idToDelete) {
         JdbcCategoryDao.logger.debug(new Date() + " public void deleteEntity(int idToDelete) {}");
 
-        return super.update("DELETE FROM entresuelo.category WHERE id = :id",
-                new CategoryMapper(), new MapSqlParameterSource().addValue("id", idToDelete));
+        return super.update(AbstractDao.DELETE_CATEGORY + " WHERE id = " + idToDelete);
     }	// end public void deleteEntity(int idToDelete) {}
 
     @Override
@@ -116,6 +115,8 @@ public class JdbcCategoryDao extends JdbcTemplate implements AbstractDao {
 
     @Override
     public <T> int updateEntity(T updatedEntity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Category category = (Category)updatedEntity;
+        return super.update(AbstractDao.UPDATE_CATEGORY + " name = '" + category.getName() 
+                + "', description = '" + category.getDescription() + "' WHERE id = " + category.getId());
     }
 }   // end public class CategoryDao extends SimpleJdbcDaoSupport implements AbstractDao {}

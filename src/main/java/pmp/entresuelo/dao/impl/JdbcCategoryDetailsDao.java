@@ -36,18 +36,18 @@ import pmp.entresuelo.dao.ResultSetProcessors.ItemMapper;
 //@Component("categoryDetailsDao")
 public class JdbcCategoryDetailsDao extends JdbcTemplate implements AbstractDao {
     private static final Logger logger = Logger.getLogger(JdbcCategoryDetailsDao.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender (new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender (new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
 	
-    private static void initLogger () {
-        JdbcCategoryDetailsDao.logger.addAppender(JdbcCategoryDetailsDao.consoleLog);
-	JdbcCategoryDetailsDao.logger.setLevel(Level.ALL);
-		
-	JdbcCategoryDetailsDao.logger.debug(new Date() + " private static void initLogger () {}");
-    }	// end private static void initLogger () {}
+//    private static void initLogger () {
+//        JdbcCategoryDetailsDao.logger.addAppender(JdbcCategoryDetailsDao.consoleLog);
+//	JdbcCategoryDetailsDao.logger.setLevel(Level.ALL);
+//		
+//	JdbcCategoryDetailsDao.logger.debug(new Date() + " private static void initLogger () {}");
+//    }	// end private static void initLogger () {}
 	
-    static {
-	JdbcCategoryDetailsDao.initLogger();
-    }	// end static
+//    static {
+//	JdbcCategoryDetailsDao.initLogger();
+//    }	// end static
 	
     private static final String SELECT_CATEGORIES = 
               "SELECT * "
@@ -64,7 +64,7 @@ public class JdbcCategoryDetailsDao extends JdbcTemplate implements AbstractDao 
         
     public JdbcCategoryDetailsDao () {
         super();
-	JdbcCategoryDetailsDao.logger.debug(new Date() + " public JdbcCategoryDetailsDao () {}");		
+	JdbcCategoryDetailsDao.logger.debug(new Date() + " testing updated message public JdbcCategoryDetailsDao () {}");		
     }	// end public JdbcCategoryDetailsDao () {}
 
 //  С‚Р°Рє РєР°Рє CategoryDetails - СЌС‚Рѕ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєР° Item, С‚Рѕ РґР°РЅРЅС‹Р№ РјРµС‚РѕРґ С‚СЂРµР±СѓРµС‚ РЅР° РІС…РѕРґ РёРјСЏ Item, РґР»СЏ РєРѕС‚РѕСЂРѕРіРѕ РЅСѓР¶РЅРѕ РЅР°Р№С‚Рё РґР°РЅРЅС‹Рµ

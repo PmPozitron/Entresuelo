@@ -5,7 +5,9 @@
  */
 package pmp.entresuelo.core;
 
+import java.util.Date;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -17,6 +19,8 @@ public class ItemAdder {
     private Item container;
     private List<Category> categories;
     
+    private final static Logger logger = Logger.getLogger(ItemAdder.class);
+    
     public ItemAdder() {
         
     }
@@ -26,6 +30,8 @@ public class ItemAdder {
         this.setItem(item);
         this.setContainer(container);
         this.setCategories(categories);
+        
+        logger.debug(new Date() + " public ItemAdder(Item item, Item container, List<Category> categories) {}");
     }
     
     public Item getItem() {

@@ -71,7 +71,10 @@ public class CategoryManager implements AbstractManager {
 
     @Override
     public <T> int updateEntity(T entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.categoryDao.updateEntity(entity);
     }
+    
+    public int deleteEntity(int idToDelete) {
+        return this.categoryDao.deleteEntity(idToDelete);    }
 
 }	// end public class CategoryManager implements AbstractManager {}

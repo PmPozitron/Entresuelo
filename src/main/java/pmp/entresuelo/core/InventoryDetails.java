@@ -12,18 +12,18 @@ import org.apache.log4j.SimpleLayout;
 public class InventoryDetails implements Serializable {
 
     private static final Logger logger = Logger.getLogger(InventoryDetails.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
 
-    private static void initLogger() {
-        InventoryDetails.logger.addAppender(InventoryDetails.consoleLog);
-        InventoryDetails.logger.setLevel(Level.ALL);
-
-        InventoryDetails.logger.debug(new Date() + " private static void initLogger() {}");
-    }	// end private static void initLogger() {}
-
-    static {
-        InventoryDetails.initLogger();
-    }	// end static
+//    private static void initLogger() {
+//        InventoryDetails.logger.addAppender(InventoryDetails.consoleLog);
+//        InventoryDetails.logger.setLevel(Level.ALL);
+//
+//        InventoryDetails.logger.debug(new Date() + " private static void initLogger() {}");
+//    }	// end private static void initLogger() {}
+//
+//    static {
+//        InventoryDetails.initLogger();
+//    }	// end static
 
 //  private int itemHolderId;
 //  private int [] storedItemsIds;
@@ -39,7 +39,7 @@ public class InventoryDetails implements Serializable {
     public InventoryDetails(Item container, List<Item> inventory) {
         super();
 //	InventoryDetails.initLogger();
-        InventoryDetails.logger.debug(new Date() + " public InventoryDetails(int itemHolderId, int[] storedItemIds) {}");
+        InventoryDetails.logger.debug(new Date() + " testing updated message public InventoryDetails(int itemHolderId, int[] storedItemIds) {}");
 
         this.setContainer(container);
         this.setInventory(inventory);

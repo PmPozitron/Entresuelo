@@ -69,7 +69,11 @@ public class LocationManager implements AbstractManager {
 
     @Override
     public <T> int updateEntity(T entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.locationDao.updateEntity(entity);
+    }
+    
+    public int deleteEntityById(int locationId) {
+        return this.locationDao.deleteEntity(locationId);
     }
 
 }	// end public class LocationManager implements AbstractManager {}

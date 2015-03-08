@@ -66,7 +66,19 @@ public interface AbstractDao {
             "DELETE FROM entresuelo.inventory_details ";       
 
     String DELETE_FROM_CATEGORY_DETAILS = 
-            "DELETE FROM entresuelo.categories_details ";       
+            "DELETE FROM entresuelo.categories_details ";   
+    
+    String UPDATE_LOCATION = 
+            "UPDATE entresuelo.location SET ";
+    
+    String DELETE_LOCATION = 
+            "DELETE FROM entresuelo.location ";
+    
+    String UPDATE_CATEGORY = 
+            "UPDATE entresuelo.category SET ";
+    
+    String DELETE_CATEGORY = 
+            "DELETE FROM entresuelo.category ";
     
     <T> List <T> getAllEntities();
     <T> List<T> getEntityByName(String name);

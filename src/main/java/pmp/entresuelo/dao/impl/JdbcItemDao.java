@@ -28,18 +28,18 @@ import pmp.entresuelo.dao.ResultSetProcessors.ItemMapper;
 public class JdbcItemDao extends JdbcTemplate implements AbstractDao {
 
     private static final Logger logger = Logger.getLogger(JdbcItemDao.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-
-    private static void initLogger() {
-        JdbcItemDao.logger.addAppender(JdbcItemDao.consoleLog);
-        JdbcItemDao.logger.setLevel(Level.ALL);
-
-        JdbcItemDao.logger.debug(new Date() + " private static void initLogger () {}");
-    }	// end private static void initLogger () {}
-
-    static {
-        JdbcItemDao.initLogger();
-    }	// end static
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
+//
+//    private static void initLogger() {
+//        JdbcItemDao.logger.addAppender(JdbcItemDao.consoleLog);
+//        JdbcItemDao.logger.setLevel(Level.ALL);
+//
+//        JdbcItemDao.logger.debug(new Date() + " private static void initLogger () {}");
+//    }	// end private static void initLogger () {}
+//
+//    static {
+//        JdbcItemDao.initLogger();
+//    }	// end static
 
 //    private static final String SELECT_ALL_ITEMS =
 //              "SELECT i.id, i.name, i.description, l.id, l.name "
@@ -50,7 +50,7 @@ public class JdbcItemDao extends JdbcTemplate implements AbstractDao {
 //    DataSource dataSource;
     public JdbcItemDao() {
         super();
-        JdbcItemDao.logger.debug(new Date() + " public JdbcItemDao () {}");
+        JdbcItemDao.logger.debug(new Date() + " testing updated message public JdbcItemDao () {}");
     }	// end public JdbcLocationDao () {}
 
     @Override

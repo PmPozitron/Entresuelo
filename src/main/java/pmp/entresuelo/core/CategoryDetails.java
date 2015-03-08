@@ -13,18 +13,18 @@ import org.apache.log4j.SimpleLayout;
 public class CategoryDetails implements Serializable {
 
     private static final Logger logger = Logger.getLogger(CategoryDetails.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
 
-    private static void initLogger() {
-        CategoryDetails.logger.addAppender(consoleLog);
-        CategoryDetails.logger.setLevel(Level.ALL);
-
-        CategoryDetails.logger.debug(new Date() + " private static void initLogger() {}");
-    }	// end private static void initLogger() {}
-
-    static {
-        CategoryDetails.initLogger();
-    }	// end static
+//    private static void initLogger() {
+//        CategoryDetails.logger.addAppender(consoleLog);
+//        CategoryDetails.logger.setLevel(Level.ALL);
+//
+//        CategoryDetails.logger.debug(new Date() + " private static void initLogger() {}");
+//    }	// end private static void initLogger() {}
+//
+//    static {
+//        CategoryDetails.initLogger();
+//    }	// end static
 
 //	private int itemId;
 //	private int [] cateroryIds;
@@ -40,7 +40,7 @@ public class CategoryDetails implements Serializable {
     public CategoryDetails(Item item, List<Category> categories) {
         super();
 //	CategoryDetails.initLogger();
-        CategoryDetails.logger.debug(new Date() + " public CategoryDetails(int itemId, int[]categoryIds) {}");
+        CategoryDetails.logger.debug(new Date() + " testing updated message public CategoryDetails(int itemId, int[]categoryIds) {}");
 
         this.setItem(item);
         this.setCategories(categories);

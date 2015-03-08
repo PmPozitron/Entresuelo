@@ -37,6 +37,7 @@ import pmp.entresuelo.service.ItemValidator;
 import pmp.entresuelo.service.LocationValidator;
 import pmp.entresuelo.service.SimpleItemAdderValidator;
 import pmp.entresuelo.service.impl.CategoryDetailsManager;
+import pmp.entresuelo.service.impl.CategoryManager;
 import pmp.entresuelo.service.impl.InventoryDetailsManager;
 import pmp.entresuelo.service.impl.ItemManager;
 import pmp.entresuelo.service.impl.LocationManager;
@@ -633,37 +634,109 @@ public class MainController {
         }
 
         if (oldContainerId != editedItemAdder.getContainerId()) {
-            ((InventoryDetailsManager) inventoryDetailsManager).updateContainerForItem(oldContainerId, 
+            ((InventoryDetailsManager) inventoryDetailsManager).updateContainerForItem(oldContainerId,
                     editedItemAdder.getContainerId(), editedItemAdder.getItem().getId());
         }
-        
-        if (editedItemAdder.getCategories().size() != ((CategoryDetailsManager)categoryDetailsManager).getCategoriesByItem(oldItem.getName()).size()) {
+
+        if (editedItemAdder.getCategories().size() != ((CategoryDetailsManager) categoryDetailsManager).getCategoriesByItem(oldItem.getName()).size()) {
             int[] catIds = new int[editedItemAdder.getCategories().size()];
             for (int i = 0; i < editedItemAdder.getCategories().size(); i++) {
                 catIds[i] = editedItemAdder.getCategories().get(i);
             }
-            
-            ((CategoryDetailsManager)categoryDetailsManager).updateCategoriesForItem(catIds, cd);            
-        }  
+
+            ((CategoryDetailsManager) categoryDetailsManager).updateCategoriesForItem(catIds, cd);
+        }
 
         return new ModelAndView("redirect:allCategoryDetailsNew");
     }
-    
+
     @RequestMapping(value = {"deleteItem"}, method = RequestMethod.GET)
     public ModelAndView deleteItem(@RequestParam("itemId") int itemId) {
         ModelAndView mav = new ModelAndView("redirect:allCategoryDetailsNew");
-            
+
         if (itemId > 0) {
             Item item = this.itemManager.getEntityById(itemId);
             CategoryDetails cd = this.categoryDetailsManager.getEntityById(itemId);
             InventoryDetails id = this.inventoryDetailsManager.getEntityById(itemId);
-            
-            ((InventoryDetailsManager)inventoryDetailsManager).deleteInventoryDetailsForItem(item);
-            ((CategoryDetailsManager)categoryDetailsManager).deleteCategoriesForItem(cd);
-            ((ItemManager)itemManager).deleteItem(item);
-            
+
+            ((InventoryDetailsManager) inventoryDetailsManager).deleteInventoryDetailsForItem(item);
+            ((CategoryDetailsManager) categoryDetailsManager).deleteCategoriesForItem(cd);
+            ((ItemManager) itemManager).deleteItem(item);
+
         }
-        
+
+        return mav;
+    }
+
+    @RequestMapping(value = {"editLocation"}, method = RequestMethod.GET)
+    public ModelAndView editLocation(@RequestParam("locationId") int locationId) {
+        ModelAndView mav = new ModelAndView("editLocation");
+
+        mav.addObject("editLocation", this.locationManager.getEntityById(locationId));
+
+        return mav;
+    }
+
+    @RequestMapping(value = {"editLocation"}, method = RequestMethod.POST)
+    public ModelAndView saveEditedLocation(@ModelAttribute("editLocation") Location editedLocation, BindingResult result) {
+
+        this.locationValidator.validate(editedLocation, result);
+        if (result.hasErrors()) {
+            ModelAndView mav = new ModelAndView("editLocation");
+            mav.addAllObjects(result.getModel());
+            return mav;
+        }
+
+        ModelAndView mav = new ModelAndView("redirect:allLocations");
+
+        System.out.println(this.locationManager.updateEntity(editedLocation));
+
+        return mav;
+    }
+
+    @RequestMapping(value = {"deleteLocation"}, method = RequestMethod.GET)
+    public ModelAndView deleteLocation(@RequestParam("locationId") int locationId) {
+        ModelAndView mav = new ModelAndView("redirect:allLocations");
+
+        ((LocationManager) locationManager).deleteEntityById(locationId);
+
+        return mav;
+    }
+
+    @RequestMapping(value = {"editCategory"}, method = RequestMethod.GET)
+    public ModelAndView editCategory(@RequestParam("categoryId") int categoryId) {
+        ModelAndView mav = new ModelAndView("editCategory");
+
+        mav.addObject("editCategory", this.categoryManager.getEntityById(categoryId));
+
+        return mav;
+    }
+
+    @RequestMapping(value = {"editCategory"}, method = RequestMethod.POST)
+    public ModelAndView saveEditedLocation(@ModelAttribute("editCategory") Category editedCategory, BindingResult result) {
+
+        this.categoryValidator.validate(editedCategory, result);
+        if (result.hasErrors()) {
+            ModelAndView mav = new ModelAndView("editLocation");
+            mav.addAllObjects(result.getModel());
+            return mav;
+        }
+
+        ModelAndView mav = new ModelAndView("redirect:allCategories");
+
+        System.out.println(this.categoryManager.updateEntity(editedCategory));
+
+        return mav;
+    }
+
+    @RequestMapping(value = {"deleteCategory"}, method = RequestMethod.GET)
+    public ModelAndView deleteCategory(@RequestParam("categoryId") int categoryId) {
+        ModelAndView mav = new ModelAndView("redirect:allCategories");
+
+        if (categoryId > 0) {
+            System.out.println("deleted " + ((CategoryManager) categoryManager).deleteEntity(categoryId));
+        }
+
         return mav;
     }
 }   // end public class MainController {}

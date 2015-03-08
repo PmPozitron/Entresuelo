@@ -27,18 +27,18 @@ import pmp.entresuelo.core.ItemAdder;
 public class ItemValidator implements Validator {
 
     private static Logger logger = Logger.getLogger(ItemValidator.class);
-    private static ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_ERR);
-
-    private static void initLogger() {
-        ItemValidator.logger.addAppender(ItemValidator.consoleLog);
-        ItemValidator.logger.setLevel(Level.ALL);
-
-        ItemValidator.logger.debug(new Date() + " ItemValidator.initLogger() {}");
-    }   // end private static void initLogger() {}
-
-    static {
-        ItemValidator.initLogger();
-    }   // end static
+//    private static ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_ERR);
+//
+//    private static void initLogger() {
+//        ItemValidator.logger.addAppender(ItemValidator.consoleLog);
+//        ItemValidator.logger.setLevel(Level.ALL);
+//
+//        ItemValidator.logger.debug(new Date() + " ItemValidator.initLogger() {}");
+//    }   // end private static void initLogger() {}
+//
+//    static {
+//        ItemValidator.initLogger();
+//    }   // end static
 
     @Override
     public boolean supports(Class<?> type) {

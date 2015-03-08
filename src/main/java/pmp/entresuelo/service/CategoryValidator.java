@@ -24,18 +24,18 @@ import pmp.entresuelo.core.Category;
 public class CategoryValidator implements Validator {
 
     private static Logger logger = Logger.getLogger(CategoryValidator.class);
-    private static ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_ERR);
-
-    private static void initLogger() {
-        CategoryValidator.logger.addAppender(CategoryValidator.consoleLog);
-        CategoryValidator.logger.setLevel(Level.ALL);
-
-        CategoryValidator.logger.debug(new Date() + " CategoryValidator.initLogger() {}");
-    }   // end private static void initLogger() {}
-
-    static {
-        CategoryValidator.initLogger();
-    }   // end static
+//    private static ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_ERR);
+//
+//    private static void initLogger() {
+//        CategoryValidator.logger.addAppender(CategoryValidator.consoleLog);
+//        CategoryValidator.logger.setLevel(Level.ALL);
+//
+//        CategoryValidator.logger.debug(new Date() + " CategoryValidator.initLogger() {}");
+//    }   // end private static void initLogger() {}
+//
+//    static {
+//        CategoryValidator.initLogger();
+//    }   // end static
 
     @Override
     public boolean supports(Class<?> clazz) {

@@ -6,6 +6,7 @@
 package pmp.entresuelo.core;
 
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -18,6 +19,8 @@ public class SimpleItemAdder {
     private Item item;
     private int containerId;
     private List<Integer> categories;
+    
+    private final static Logger logger = Logger.getLogger(SimpleItemAdder.class);
     
     public SimpleItemAdder() {
         
