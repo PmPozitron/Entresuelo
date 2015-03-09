@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.173" errors="0" skipped="1" tests="6" name="pmp.MainControllerTest">
+<testsuite failures="0" time="0.149" errors="0" skipped="1" tests="6" name="pmp.MainControllerTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.7.0_21\jre\bin"/>
@@ -62,12 +62,12 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase time="0.09" classname="pmp.MainControllerTest" name="thatWelcomeRequestReturnsHelloView"/>
+  <testcase time="0.088" classname="pmp.MainControllerTest" name="thatWelcomeRequestReturnsHelloView"/>
   <testcase time="0.015" classname="pmp.MainControllerTest" name="thatAdminRequestReturnsAdminView"/>
   <testcase time="0.016" classname="pmp.MainControllerTest" name="thatAuthenticationIsRequested">
     <skipped/>
   </testcase>
-  <testcase time="0.014" classname="pmp.MainControllerTest" name="that403RequestReturns403View"/>
-  <testcase time="0.025" classname="pmp.MainControllerTest" name="thatLoginRequestReturnsLoginView"/>
-  <testcase time="0.013" classname="pmp.MainControllerTest" name="thatRootRequestReturnsHelloView"/>
+  <testcase time="0.015" classname="pmp.MainControllerTest" name="that403RequestReturns403View"/>
+  <testcase time="0.005" classname="pmp.MainControllerTest" name="thatLoginRequestReturnsLoginView"/>
+  <testcase time="0.01" classname="pmp.MainControllerTest" name="thatRootRequestReturnsHelloView"/>
 </testsuite>

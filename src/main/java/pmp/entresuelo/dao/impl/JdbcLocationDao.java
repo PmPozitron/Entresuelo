@@ -75,10 +75,7 @@ public class JdbcLocationDao extends JdbcTemplate implements AbstractDao {
 	JdbcLocationDao.logger.debug(new Date() + " public <T> int addNewEntity(T newEntity) {}");
 		
 	Location location = (Location)newEntity;        
-        int count = super.update(AbstractDao.INSERT_INTO_LOCATIONS + "('" + location.getName() + "', '" + location.getDescription() + "');");
-        
-        return count;
-
+        return super.update(AbstractDao.INSERT_INTO_LOCATIONS + "('" + location.getName() + "', '" + location.getDescription() + "');");        
     }	// end public <T> int addNewEntity(T newEntity) {} 
 
     @Deprecated // there's some bug in spring 3.2.8 jdbc for which sqlparams binding isn't working. or may be it is some mine bug

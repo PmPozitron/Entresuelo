@@ -21,24 +21,24 @@ import pmp.entresuelo.dao.impl.JdbcCategoryDetailsDao;
 public class CategoryManager implements AbstractManager {
 
     private static final Logger logger = Logger.getLogger(CategoryManager.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-
-    private static void initLogger() {
-        CategoryManager.logger.addAppender(CategoryManager.consoleLog);
-        CategoryManager.logger.setLevel(Level.ALL);
-        CategoryManager.logger.debug(new Date() + " private static void initLogger() {}");
-    }	// end private static void initLogger() {}
-
-    static {
-        CategoryManager.initLogger();
-    }	// end static
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
+//
+//    private static void initLogger() {
+//        CategoryManager.logger.addAppender(CategoryManager.consoleLog);
+//        CategoryManager.logger.setLevel(Level.ALL);
+//        CategoryManager.logger.debug(new Date() + " private static void initLogger() {}");
+//    }	// end private static void initLogger() {}
+//
+//    static {
+//        CategoryManager.initLogger();
+//    }	// end static
 
     @Autowired
     private AbstractDao categoryDao;
 
     public CategoryManager() {
 //		CategoryManager.initLogger();
-        CategoryManager.logger.debug(new Date() + " public CategoryManager () {}");
+        CategoryManager.logger.debug(new Date() + " testing new message public CategoryManager () {}");
     }	// end public CategoryManager () {}
 
     public void setCategoryDao(AbstractDao dao) {

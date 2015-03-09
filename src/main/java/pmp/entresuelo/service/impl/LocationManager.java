@@ -18,39 +18,40 @@ import org.springframework.stereotype.Component;
 
 //@Component("locationManager")
 public class LocationManager implements AbstractManager {
-	private static final Logger logger = Logger.getLogger(LocationManager.class);
-	private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-	
-	private static void initLogger() {
-		LocationManager.logger.addAppender(LocationManager.consoleLog);
-		LocationManager.logger.setLevel(Level.ALL);
-		LocationManager.logger.debug(new Date() + " private static void initLogger() {}");		
-	}	// end private static void initLogger() {}
-	
-	static {
-		LocationManager.initLogger();
-	}	// end static
-	
-        @Autowired
-	private AbstractDao locationDao;
-	
-	public LocationManager () {
-//		LocationManager.initLogger();
-		LocationManager.logger.debug(new Date() + " public LocationManager () {}");
-	}	// end public LocationManager () {}
-	
-	public void setLocationDao(AbstractDao dao) {
-		LocationManager.logger.debug(new Date() + " public void setDao(AbstractDao dao) {}");
-		
-		this.locationDao = dao;
-	}	// end public void setManager(AbstractManager manager) {}
 
-	@Override
-	public List<Location> getAllEntities() {
-		List<Location> locations = this.locationDao.getAllEntities();
-		
-		return locations;
-	}	// end public List<Item> getAllEntities() {}
+    private static final Logger logger = Logger.getLogger(LocationManager.class);
+//	private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
+//	
+//	private static void initLogger() {
+//		LocationManager.logger.addAppender(LocationManager.consoleLog);
+//		LocationManager.logger.setLevel(Level.ALL);
+//		LocationManager.logger.debug(new Date() + " private static void initLogger() {}");		
+//	}	// end private static void initLogger() {}
+//	
+//	static {
+//		LocationManager.initLogger();
+//	}	// end static
+
+    @Autowired
+    private AbstractDao locationDao;
+
+    public LocationManager() {
+//		LocationManager.initLogger();
+        LocationManager.logger.debug(new Date() + " public LocationManager () {}");
+    }	// end public LocationManager () {}
+
+    public void setLocationDao(AbstractDao dao) {
+        LocationManager.logger.debug(new Date() + " testing new message public void setDao(AbstractDao dao) {}");
+
+        this.locationDao = dao;
+    }	// end public void setManager(AbstractManager manager) {}
+
+    @Override
+    public List<Location> getAllEntities() {
+        List<Location> locations = this.locationDao.getAllEntities();
+
+        return locations;
+    }	// end public List<Item> getAllEntities() {}
 
     @Override
     public <T> int addNewEntity(T newEntity) {
@@ -71,7 +72,7 @@ public class LocationManager implements AbstractManager {
     public <T> int updateEntity(T entity) {
         return this.locationDao.updateEntity(entity);
     }
-    
+
     public int deleteEntityById(int locationId) {
         return this.locationDao.deleteEntity(locationId);
     }

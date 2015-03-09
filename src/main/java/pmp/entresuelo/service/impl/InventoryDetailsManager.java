@@ -22,17 +22,17 @@ import pmp.entresuelo.dao.impl.JdbcInventoryDetailsDao;
 public class InventoryDetailsManager implements AbstractManager {
 
     private static final Logger logger = Logger.getLogger(InventoryDetailsManager.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-
-    private static void initLogger() {
-        InventoryDetailsManager.logger.addAppender(InventoryDetailsManager.consoleLog);
-        InventoryDetailsManager.logger.setLevel(Level.ALL);
-        InventoryDetailsManager.logger.debug(new Date() + " private static void initLogger() {}");
-    }	// end private static void initLogger() {}
-
-    static {
-        InventoryDetailsManager.initLogger();
-    }	// end static
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
+//
+//    private static void initLogger() {
+//        InventoryDetailsManager.logger.addAppender(InventoryDetailsManager.consoleLog);
+//        InventoryDetailsManager.logger.setLevel(Level.ALL);
+//        InventoryDetailsManager.logger.debug(new Date() + " private static void initLogger() {}");
+//    }	// end private static void initLogger() {}
+//
+//    static {
+//        InventoryDetailsManager.initLogger();
+//    }	// end static
 
     @Autowired
     private AbstractDao inventoryDetailsDao;
@@ -41,7 +41,7 @@ public class InventoryDetailsManager implements AbstractManager {
 
     public InventoryDetailsManager() {
 //	InventoryDetailsManager.initLogger();
-        InventoryDetailsManager.logger.debug(new Date() + " public InventoryDetailsManager () {}");
+        InventoryDetailsManager.logger.debug(new Date() + " testing new message public InventoryDetailsManager () {}");
     }	// end public InventoryDetailsManager () {}
 
     public void setInventoryDetailsDao(AbstractDao dao) {

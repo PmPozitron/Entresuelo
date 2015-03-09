@@ -50,18 +50,23 @@ public class MainController {
 
     @Autowired
     AbstractManager itemManager;
+//    ItemManager itemManager;
 
     @Autowired
     AbstractManager locationManager;
+//    LocationManager locationManager;
 
     @Autowired
     AbstractManager categoryManager;
+//    CategoryManager categoryManager;
 
     @Autowired
     AbstractManager categoryDetailsManager;
+//    CategoryDetailsManager categoryDetailsManager;
 
     @Autowired
     AbstractManager inventoryDetailsManager;
+//    InventoryDetailsManager inventoryDetailsManager;
 
     @Autowired
     ItemValidator itemValidator;
@@ -101,20 +106,29 @@ public class MainController {
 
     }	// public class MainController () {}
 
-    public void setitemManager(AbstractManager manager) {
+//    public void setitemManager(AbstractManager manager) {
+    public void setitemManager(ItemManager manager) {
         this.itemManager = manager;
     }	// end public void setManager(AbstractManager manager) {}
 
-    public void setLocationManager(AbstractManager manager) {
+//    public void setLocationManager(AbstractManager manager) {
+    public void setLocationManager(LocationManager manager) {
         this.locationManager = manager;
     }	// end public void setManager(AbstractManager manager) {}
 
-    public void setCategoryManager(AbstractManager manager) {
+//    public void setCategoryManager(AbstractManager manager) {
+    public void setCategoryManager(CategoryManager manager) {
         this.categoryManager = manager;
     }	// end public void setManager(AbstractManager manager) {}
 
-    public void setCategoryDetailsManager(AbstractManager manager) {
+//    public void setCategoryDetailsManager(AbstractManager manager) {
+    public void setCategoryDetailsManager(CategoryDetailsManager manager) {
         this.categoryDetailsManager = manager;
+    }	// end public void setCategoryDetailsManager(AbstractManager manager) {}
+
+//    public void setCategoryDetailsManager(AbstractManager manager) {
+    public void setInventoryDetailsManager(InventoryDetailsManager manager) {
+        this.inventoryDetailsManager = manager;
     }	// end public void setCategoryDetailsManager(AbstractManager manager) {}
 
     @RequestMapping(value = {"/", "/welcome**"}, method = RequestMethod.GET)

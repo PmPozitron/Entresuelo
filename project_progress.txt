@@ -72,4 +72,16 @@ ToDo:
         It should work on every web container and OS as it's not dependent on a container specific 
         system property and it's not affected by OS specific path issues. 
         Tested with Tomcat and Orion web containers and on Windows and Linux and it works fine so far.
-============================================================================================================================================            
+============================================================================================================================================    
+
+09/02/13:
+    с транзакциями получается такая ситуация: при добавлении <tx:annotation-driven transaction-manager="txManager" /> и 
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    в контекст + @Transactional на AbstractManager (дополнительно @Transactional(propagation = Propagation.REQUIRED, readOnly = false) на методы)
+    механизм работы с транзакциями работает, но почему-то при вызове ((InventoryDetailsManager) inventoryDetailsManager).getAllInventories();
+    (видимо, для всех вызовов  методов с кастом) вылезает иксепшн, что невозможно скастить com.sun.proxy к InventoryDetailsManager.
+    Я пробовал в MainController объявить явно как InventoryDetailsManager (а не AbstractManager) и остальные тоже пробовал - тогда валится приложение полностью.
+    Пока отключу @Transactional у AbstractManager. При ближайшем рефакторнге нужно максимум dao & service функционала вынести в интерфейс, 
+    а то и вообще заменить интерфейс на абстрактный класс с несколькими базовыми имплементированными методами (select_all, select_where).

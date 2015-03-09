@@ -20,24 +20,24 @@ import org.springframework.stereotype.Component;
 public class ItemManager implements AbstractManager {
 
     private static final Logger logger = Logger.getLogger(ItemManager.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-
-    private static void initLogger() {
-        ItemManager.logger.addAppender(ItemManager.consoleLog);
-        ItemManager.logger.setLevel(Level.ALL);
-        ItemManager.logger.debug(new Date() + " private static void initLogger() {}");
-    }	// end private static void initLogger() {}
-
-    static {
-        ItemManager.initLogger();
-    }	// end static
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
+//
+//    private static void initLogger() {
+//        ItemManager.logger.addAppender(ItemManager.consoleLog);
+//        ItemManager.logger.setLevel(Level.ALL);
+//        ItemManager.logger.debug(new Date() + " private static void initLogger() {}");
+//    }	// end private static void initLogger() {}
+//
+//    static {
+//        ItemManager.initLogger();
+//    }	// end static
 
     @Autowired
     private AbstractDao itemDao;
         
     public ItemManager() {
 //		ItemManager.initLogger();
-        ItemManager.logger.debug(new Date() + " public ItemManager () {}");
+        ItemManager.logger.debug(new Date() + " testing new message public ItemManager () {}");
     }	// end public ItemManager () {}
 
     public void setItemDao(AbstractDao dao) {

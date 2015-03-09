@@ -16,23 +16,26 @@ import org.apache.log4j.Level;
 import org.apache.log4j.SimpleLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pmp.entresuelo.dao.impl.JdbcCategoryDetailsDao;
 
 //@Component("categoryDetailsManager")
+//@Transactional(propagation=Propagation.SUPPORTS, readOnly=true)
 public class CategoryDetailsManager implements AbstractManager {
 
     private static final Logger logger = Logger.getLogger(CategoryDetailsManager.class);
-    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-
-    private static void initLogger() {
-        CategoryDetailsManager.logger.addAppender(CategoryDetailsManager.consoleLog);
-        CategoryDetailsManager.logger.setLevel(Level.ALL);
-        CategoryDetailsManager.logger.debug(new Date() + " private static void initLogger() {}");
-    }	// end private static void initLogger() {}
-
-    static {
-        CategoryDetailsManager.initLogger();
-    }	// end static
+//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
+//
+//    private static void initLogger() {
+//        CategoryDetailsManager.logger.addAppender(CategoryDetailsManager.consoleLog);
+//        CategoryDetailsManager.logger.setLevel(Level.ALL);
+//        CategoryDetailsManager.logger.debug(new Date() + " private static void initLogger() {}");
+//    }	// end private static void initLogger() {}
+//
+//    static {
+//        CategoryDetailsManager.initLogger();
+//    }	// end static
 
     @Autowired
     private AbstractDao categoryDetailsDao;
@@ -43,7 +46,7 @@ public class CategoryDetailsManager implements AbstractManager {
 
     public CategoryDetailsManager() {
 //		CategoryDetailsManager.initLogger();
-        CategoryDetailsManager.logger.debug(new Date() + " public CategoryDetailsManager () {}");
+        CategoryDetailsManager.logger.debug(new Date() + " testing new message public CategoryDetailsManager () {}");
     }	// end public CategoryDetailsManager () {}
 
     public void setCategoryDetailsDao(AbstractDao dao) {
@@ -127,6 +130,7 @@ public class CategoryDetailsManager implements AbstractManager {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+//    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public int updateCategoriesForItem(List<Category> newCategories, CategoryDetails cd) {
         if (cd != null && cd.getCategories() != null) {
             ((JdbcCategoryDetailsDao)(categoryDetailsDao)).deleteCategoriesForItem(cd.getItem());
@@ -138,7 +142,7 @@ public class CategoryDetailsManager implements AbstractManager {
         
         return -1;
     }
-
+//    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public int updateCategoriesForItem(int[] newCategoryIds, CategoryDetails cd) {
         if (cd.getCategories() != null) {
             ((JdbcCategoryDetailsDao)(categoryDetailsDao)).deleteCategoriesForItem(cd.getItem());
