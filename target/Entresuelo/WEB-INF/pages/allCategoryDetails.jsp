@@ -3,26 +3,29 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link type="text/css" href="<c:url value="/static/styles/entresuelo.css" />" rel="stylesheet">
+        <link type="text/css" href="<c:url value="/static/styles/tables.css" />" rel="stylesheet">
+
 
         <!-- <script type="text/javascript" src="js/contacts.js"></script> -->
     </head>
-    <body style="font-family: Arial; font-size:smaller;">
+    <body>
     <center>
 
-        <table style="border-collapse: collapse;" border="1" bordercolor="#006699" width="500">
+        <table>
 
             <c:forEach var="categoryDetails" items="${categoryDetails}" >
 
-                <tr bgcolor="lightblue">
-                    <th><c:out value="${categoryDetails.item.name}"></c:out></th>
+                <tr class="theOutput">
+                    <th class="name"><c:out value="${categoryDetails.item.name}"></c:out></th>
                     <th><c:out value="${categoryDetails.item.description}"></c:out></th>							
-                    </tr>
+                </tr>
 
                 <c:if test="${not empty categoryDetails.categories}">
                     <c:forEach var="category" items="${categoryDetails.categories}">
                         <tr>
-                            <th>Категория</th>
-                            <th><c:out value="${category.name}"></c:out> / <c:out value="${category.description}"></c:out></th>
+                            <th class="theHeader">Категория</th>
+                            <th class="theOutput"><c:out value="${category.name}"></c:out> / <c:out value="${category.description}"></c:out></th>
                         </tr>
                     </c:forEach>
                 </c:if>

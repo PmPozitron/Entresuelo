@@ -452,13 +452,13 @@ public class MainController {
             locations.add(locaionStub);
             locations.addAll((List<Location>) this.locationManager.getAllEntities());
 
-            ItemAdder itemAdder = new ItemAdder(itemStub, container, categories);
+            SimpleItemAdder itemAdder = new SimpleItemAdder(itemStub, container.getId(), new ArrayList<Integer>());
 
-            mav.addAllObjects(result.getModel());
-//            mav.addObject("errors", result.getFieldErrors());
-            mav.addObject("newItemWithDetails", itemAdder);
+            mav.addAllObjects(result.getModel());            
+//            mav.addObject("newItemWithDetails", itemAdder);
             mav.addObject("containers", containers);
             mav.addObject("locations", locations);
+            mav.addObject("categories", categories);
 
             for (FieldError error : result.getFieldErrors()) {
                 logger.debug(error.getField() + " - " + error.getDefaultMessage());
@@ -586,7 +586,7 @@ public class MainController {
 
     @RequestMapping(value = {"editItemDetails"}, method = RequestMethod.POST)
     public ModelAndView saveEditedItemDetails(
-            @ModelAttribute("newItemWithDetails") SimpleItemAdder editedItemAdder,
+            @ModelAttribute("editItemDetails") SimpleItemAdder editedItemAdder,
             @RequestParam("itemId") int itemId,
             BindingResult result) {
         MainController.logger.debug(new Date() + " public ModelAndView saveEditedItemDetails() {}");
@@ -611,13 +611,14 @@ public class MainController {
 
             SimpleItemAdder itemAdder = new SimpleItemAdder(item, ((container == null) ? -1 : container.getId()), categoryIds);
 
-            mav.addObject("editItemDetails", itemAdder);
+            mav.addAllObjects(result.getModel());
+    //            mav.addObject("editItemDetails", itemAdder);
             mav.addObject("categoryDetails", cd);
             mav.addObject("inventoryDetails", id);
             mav.addObject("locations", locationManager.getAllEntities());
-            mav.addObject("categories", categoryManager.getAllEntities());
+            mav.addObject("categoriesList", categoryManager.getAllEntities());
             mav.addObject("containers", this.itemManager.getAllEntities()); //TODO add filtration by 'has container category' query
-            mav.addAllObjects(result.getModel());
+            
 
             return mav;
         }

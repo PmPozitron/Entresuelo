@@ -74,7 +74,7 @@ ToDo:
         Tested with Tomcat and Orion web containers and on Windows and Linux and it works fine so far.
 ============================================================================================================================================    
 
-09/02/13:
+09/03/13:
     с транзакциями получается такая ситуация: при добавлении <tx:annotation-driven transaction-manager="txManager" /> и 
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
@@ -85,3 +85,6 @@ ToDo:
     Я пробовал в MainController объявить явно как InventoryDetailsManager (а не AbstractManager) и остальные тоже пробовал - тогда валится приложение полностью.
     Пока отключу @Transactional у AbstractManager. При ближайшем рефакторнге нужно максимум dao & service функционала вынести в интерфейс, 
     а то и вообще заменить интерфейс на абстрактный класс с несколькими базовыми имплементированными методами (select_all, select_where).
+
+10/03/15:
+    начата работа над оформлением - стили вынесены в отдельные css файлы.

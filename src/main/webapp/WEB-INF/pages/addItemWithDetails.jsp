@@ -9,6 +9,8 @@
 
         <script src="<c:url value="/static/scripts/lib/jquery-2.1.0.js" />"></script>
         <script src="<c:url value="/static/scripts/addItem.js" />"></script>
+        <link type="text/css" href="<c:url value="/static/styles/entresuelo.css" />" rel="stylesheet">
+        <link type="text/css" href="<c:url value="/static/styles/tables.css" />" rel="stylesheet">
 
 <!-- 	<link type="text/css" href="<c:url value="/resources/styles/addItem.css" />" rel="stylesheet" />	-->
 
@@ -53,45 +55,45 @@
                         <td class="theHeader">Укажите категории :</td>
                         <td class="forInput">
                         <form:select id="categorySelect" class="theSelect" path="categories" multiple="true">                            
-<%--                            <c:forEach var="category" items="${newItemWithDetails.categories}"> 
-                                <form:option value="-" label="--Please Select"/>
---%>
-                                <form:options items="${categories}" itemValue="id" itemLabel="name"/>
-<%--                        <option value="${category.id}">${category.name}</option>
+                            <%--                            <c:forEach var="category" items="${newItemWithDetails.categories}"> 
+                                                            <form:option value="-" label="--Please Select"/>
+                            --%>
+                            <form:options items="${categories}" itemValue="id" itemLabel="name"/>
+                            <%--                        <option value="${category.id}">${category.name}</option>
 
                                 
                     </c:forEach>
---%>
-                </form:select>
-            </td>
-        </tr>
+                            --%>
+                        </form:select>
+                    </td>
+                </tr>
 
-        <tr>					
-            <td class="theHeader">Укажите контейнер :</td>
-            <td>
-                <form:select path="containerId" id="containerSelect" class="theSelect">
-<%--                    <form:option value="-" label="--Please Select"/>
---%>
-                    <form:options items="${containers}" itemValue="id" itemLabel="name"/>
-                </form:select>
-            </td>
-        </tr>
+                <tr>					
+                    <td class="theHeader">Укажите контейнер :</td>
+                    <td>
+                        <form:select path="containerId" id="containerSelect" class="theSelect">
+                            <%--                    <form:option value="-" label="--Please Select"/>
+                            --%>
+                            <form:options items="${containers}" itemValue="id" itemLabel="name"/>
+                        </form:select>
+                    </td>
+                </tr>
 
-<%--                <tr>					
-                                    <td class="theHeader">Укажите контейнер :</td>
-                                    <td class="forInput">				
-        <form:select id="containerSelect" class="theSelect" path="container">                                
-            <c:forEach var="container" items="${containers}">
-                <option value="${container.id}">${container.name}</option>
-            </c:forEach>
-        </form:select>
-        </td>
-        </tr>
---%>
-    </table>
-    <br>
-    <input type="submit" value="Сохранить" id="submit">
-</form:form>
+                <%--                <tr>					
+                                                    <td class="theHeader">Укажите контейнер :</td>
+                                                    <td class="forInput">				
+                        <form:select id="containerSelect" class="theSelect" path="container">                                
+                            <c:forEach var="container" items="${containers}">
+                                <option value="${container.id}">${container.name}</option>
+                            </c:forEach>
+                        </form:select>
+                        </td>
+                        </tr>
+                --%>
+            </table>
+            <br>
+            <input type="submit" value="Сохранить" id="submit">
+        </form:form>
 
-</body>
+    </body>
 </html>

@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
  *
  * @author Pozitron
  */
+@Deprecated
 public class ItemAdder {
     
     private Item item;

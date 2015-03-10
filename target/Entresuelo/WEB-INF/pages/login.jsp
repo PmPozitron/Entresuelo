@@ -4,6 +4,7 @@
 <html>
 <head>
     <link type="text/css" href="<c:url value="/static/styles/login.css" />" rel="stylesheet" />
+    <link type="text/css" href="<c:url value="/static/styles/entresuelo.css" />" rel="stylesheet" />
     <script src="<c:url value="/static/scripts/lib/jquery-2.1.0.js" />"></script>
     <script src="<c:url value="/static/scripts/login.js" />"></script>
     

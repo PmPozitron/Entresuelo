@@ -14,6 +14,8 @@
 
         <script src="<c:url value="/static/scripts/lib/jquery-2.1.0.js" />"></script>
         <script src="<c:url value="/static/scripts/itemDetails.js" />"></script>
+        <link type="text/css" href="<c:url value="/static/styles/entresuelo.css" />" rel="stylesheet">
+        <link type="text/css" href="<c:url value="/static/styles/tables.css" />" rel="stylesheet">
 
 <!-- 	<link type="text/css" href="<c:url value="/resources/styles/addItem.css" />" rel="stylesheet" />	-->
 
