@@ -82,6 +82,9 @@ public class InventoryDetailsManager implements AbstractManager {
 
     @Override
     public <T> int addNewEntity(T newEntity) {
+        if (((InventoryDetails) newEntity).getContainer()== null) {
+            return 0;
+        }
         return this.inventoryDetailsDao.addNewEntity(newEntity);
     }
 
@@ -129,5 +132,9 @@ public class InventoryDetailsManager implements AbstractManager {
     
     public int deleteInventoryDetailsForItem(Item item) {
         return ((JdbcInventoryDetailsDao)inventoryDetailsDao).deleteInventoryDetailsForItem(item);
+    }
+    
+    public List<Item> getAllContainers() {
+        return ((JdbcInventoryDetailsDao)inventoryDetailsDao).getAllContainers();
     }
 }	// end public class InventoryDetailsManager implements AbstractManager {}

@@ -100,8 +100,7 @@ public class JdbcInventoryDetailsDao extends JdbcTemplate implements AbstractDao
 
         int count = 0;
         for (Item item : ((InventoryDetails) newEntity).getInventory()) {
-            super.update(AbstractDao.INSERT_INTO_INVENTORY_DETAILS + "(" + ((InventoryDetails) newEntity).getContainer().getId() + "," + item.getId() + ")");
-            count++;
+            count += super.update(AbstractDao.INSERT_INTO_INVENTORY_DETAILS + "(" + ((InventoryDetails) newEntity).getContainer().getId() + "," + item.getId() + ")");            
         }
         return count;
     }	// end public <T> int addNewEntity(T newEntity) {} 
@@ -213,5 +212,9 @@ public class JdbcInventoryDetailsDao extends JdbcTemplate implements AbstractDao
     
     public int deleteInventoryDetailsForItem(Item item) {
         return super.update(AbstractDao.DELETE_FROM_INVENTORY_DETAILS + " WHERE item_holder_id = " + item.getId() + " OR stored_item_id = " + item.getId());
+    }
+    
+    public List<Item> getAllContainers() {
+        return super.query(AbstractDao.SELECT_FROM_CATEGORY_DETAILS + " WHERE cd.category_id = 4", new ItemMapper());
     }
 }   // end public class JdbcInventoryDetailsDao extends JdbcTemplate implements AbstractDao {}

@@ -88,6 +88,10 @@ public class CategoryDetailsManager implements AbstractManager {
 
     @Override
     public <T> int addNewEntity(T newEntity) {
+        if (((CategoryDetails)newEntity).getCategories() == null || ((CategoryDetails)newEntity).getCategories().isEmpty()) {
+            return 0;
+        }
+        
         return this.categoryDetailsDao.addNewEntity(newEntity);
     }
 

@@ -409,12 +409,12 @@ public class MainController {
 
         ModelAndView mav = new ModelAndView("addItemWithDetails");
 
-        Item itemStub = new Item(-1, "---", "---", -1, "---");
-        Item container = new Item();
+        Item itemStub = new Item(-1, "---", "---", -1, "---");        
         List<Category> categories = (List<Category>) this.categoryManager.getAllEntities();
         List<Item> containers = new ArrayList<Item>();
         containers.add(itemStub);
-        containers.addAll((List<Item>) this.itemManager.getAllEntities());
+//        containers.addAll((List<Item>) this.itemManager.getAllEntities());
+        containers.addAll(((InventoryDetailsManager)inventoryDetailsManager).getAllContainers());
         Location locaionStub = new Location(-1, "---", "---");
         List<Location> locations = new ArrayList<Location>();
         locations.add(locaionStub);
@@ -446,7 +446,7 @@ public class MainController {
             List<Category> categories = (List<Category>) this.categoryManager.getAllEntities();
             List<Item> containers = new ArrayList<Item>();
             containers.add(itemStub);
-            containers.addAll((List<Item>) this.itemManager.getAllEntities());
+            containers.addAll(((InventoryDetailsManager)inventoryDetailsManager).getAllContainers());
             Location locaionStub = new Location(-1, "---", "---");
             List<Location> locations = new ArrayList<Location>();
             locations.add(locaionStub);
@@ -454,7 +454,7 @@ public class MainController {
 
             SimpleItemAdder itemAdder = new SimpleItemAdder(itemStub, container.getId(), new ArrayList<Integer>());
 
-            mav.addAllObjects(result.getModel());            
+            mav.addAllObjects(result.getModel());
 //            mav.addObject("newItemWithDetails", itemAdder);
             mav.addObject("containers", containers);
             mav.addObject("locations", locations);
@@ -579,7 +579,8 @@ public class MainController {
         mav.addObject("inventoryDetails", id);
         mav.addObject("locations", locationManager.getAllEntities());
         mav.addObject("categoriesList", categoryManager.getAllEntities());
-        mav.addObject("containers", this.itemManager.getAllEntities()); //TODO add filtration by 'has container category' query
+//        mav.addObject("containers", this.itemManager.getAllEntities()); //TODO add filtration by 'has container category' query
+        mav.addObject("containers", ((InventoryDetailsManager) inventoryDetailsManager).getAllContainers());
 
         return mav;
     }
@@ -612,13 +613,13 @@ public class MainController {
             SimpleItemAdder itemAdder = new SimpleItemAdder(item, ((container == null) ? -1 : container.getId()), categoryIds);
 
             mav.addAllObjects(result.getModel());
-    //            mav.addObject("editItemDetails", itemAdder);
+            //            mav.addObject("editItemDetails", itemAdder);
             mav.addObject("categoryDetails", cd);
             mav.addObject("inventoryDetails", id);
             mav.addObject("locations", locationManager.getAllEntities());
             mav.addObject("categoriesList", categoryManager.getAllEntities());
-            mav.addObject("containers", this.itemManager.getAllEntities()); //TODO add filtration by 'has container category' query
-            
+//            mav.addObject("containers", this.itemManager.getAllEntities()); //TODO add filtration by 'has container category' query
+            mav.addObject("containers", ((InventoryDetailsManager) inventoryDetailsManager).getAllContainers());
 
             return mav;
         }
