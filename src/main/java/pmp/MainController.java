@@ -31,11 +31,11 @@ import pmp.entresuelo.core.ItemAdder;
 import pmp.entresuelo.core.Location;
 import pmp.entresuelo.core.SimpleItemAdder;
 import pmp.entresuelo.service.AbstractManager;
-import pmp.entresuelo.service.CategoryValidator;
-import pmp.entresuelo.service.ItemAdderValidator;
-import pmp.entresuelo.service.ItemValidator;
-import pmp.entresuelo.service.LocationValidator;
-import pmp.entresuelo.service.SimpleItemAdderValidator;
+import pmp.entresuelo.service.validation.CategoryValidator;
+import pmp.entresuelo.service.validation.ItemAdderValidator;
+import pmp.entresuelo.service.validation.ItemValidator;
+import pmp.entresuelo.service.validation.LocationValidator;
+import pmp.entresuelo.service.validation.SimpleItemAdderValidator;
 import pmp.entresuelo.service.impl.CategoryDetailsManager;
 import pmp.entresuelo.service.impl.CategoryManager;
 import pmp.entresuelo.service.impl.InventoryDetailsManager;
@@ -101,8 +101,6 @@ public class MainController {
     }   // end initBinder()
 
     public MainController() {
-//		logger.addAppender(consoleLog);
-//		logger.setLevel(Level.ALL);
 
     }	// public class MainController () {}
 
@@ -274,6 +272,7 @@ public class MainController {
         return model;
     }	// end public ModelAndView allCategoryDetails() {}
 
+    @Deprecated
     @RequestMapping(value = {"allCategoryDetailsNew"}, method = RequestMethod.GET)
     public ModelAndView allCategoryDetailsNew() {
         MainController.logger.debug(new Date() + " public ModelAndView allCategoryDetailsNew() {}");
@@ -298,13 +297,10 @@ public class MainController {
 
         model.addObject("inventoryDetails", inventoryDetails);
 
-        for (int i = 0; i < inventoryDetails.size(); i++) {
-            MainController.logger.debug(inventoryDetails.get(i).toString());
-        }	// end for
-
         return model;
     }	// end public ModelAndView allInventoryDetails() {}
 
+    @Deprecated
     @RequestMapping(value = {"allInventoryDetailsNew"}, method = RequestMethod.GET)
     public ModelAndView allInventoryDetailsNew() {
         MainController.logger.debug(new Date() + " public ModelAndView allInventoryDetailsNew() {}");
@@ -316,13 +312,10 @@ public class MainController {
 
         model.addObject("inventoryDetails", inventoryDetails);
 
-        for (int i = 0; i < inventoryDetails.size(); i++) {
-            MainController.logger.debug(inventoryDetails.get(i).toString());
-        }	// end for
-
         return model;
     }	// end public ModelAndView allInventoryDetails() {}
 
+    @Deprecated
     @RequestMapping(value = {"allInventories"}, method = RequestMethod.GET)
     public ModelAndView allInventories() {
         MainController.logger.debug(new Date() + " public ModelAndView allInventories() {}");
@@ -409,28 +402,30 @@ public class MainController {
 
         ModelAndView mav = new ModelAndView("addItemWithDetails");
 
-        Item itemStub = new Item(-1, "---", "---", -1, "---");        
+        Item itemStub = new Item(-1, "---", "---", -1, "---");
         List<Category> categories = (List<Category>) this.categoryManager.getAllEntities();
-        List<Item> containers = new ArrayList<Item>();
-        containers.add(itemStub);
-//        containers.addAll((List<Item>) this.itemManager.getAllEntities());
-        containers.addAll(((InventoryDetailsManager)inventoryDetailsManager).getAllContainers());
+        List<Item> containersStub = new ArrayList<Item>();
+        List<Item> containers = inventoryDetailsManager.getAllContainers();
+        containersStub.add(itemStub);
+        containersStub.addAll(containers);
+//        containers.addAll(((InventoryDetailsManager)inventoryDetailsManager).getAllContainers());              
+//        containers.addAll(inventoryDetailsManager.getAllContainers());    //TODO: try to comprehend why this does not work
         Location locaionStub = new Location(-1, "---", "---");
         List<Location> locations = new ArrayList<Location>();
         locations.add(locaionStub);
         locations.addAll((List<Location>) this.locationManager.getAllEntities());
-//        ItemAdder itemAdder = new ItemAdder(itemStub, container, categories);
 
         SimpleItemAdder itemAdder = new SimpleItemAdder(itemStub, -1, new ArrayList<Integer>());
 
         mav.addObject("newItemWithDetails", itemAdder);
-        mav.addObject("containers", containers);
+        mav.addObject("containers", containersStub);
         mav.addObject("locations", locations);
         mav.addObject("categories", categories);
 
         return mav;
     }
 
+//  TODO: add transaction support    
     @RequestMapping(value = {"addItemWithDetails"}, method = RequestMethod.POST)
     public ModelAndView saveItemWithDetails(@ModelAttribute("newItemWithDetails") SimpleItemAdder newItemAdder, BindingResult result) {
         MainController.logger.debug(new Date() + " public ModelAndView addItemWithDetails() {}");
@@ -443,26 +438,21 @@ public class MainController {
 
             Item itemStub = new Item(-1, "---", "---", -1, "---");
             Item container = new Item();
-            List<Category> categories = (List<Category>) this.categoryManager.getAllEntities();
-            List<Item> containers = new ArrayList<Item>();
-            containers.add(itemStub);
-            containers.addAll(((InventoryDetailsManager)inventoryDetailsManager).getAllContainers());
+            List<Category> categories = (List<Category>) categoryManager.getAllEntities();
+            List<Item> containersStub = new ArrayList<Item>();
+            List<Item> containers = inventoryDetailsManager.getAllContainers();
+            containersStub.add(itemStub);
+            containersStub.addAll(containers);
+
             Location locaionStub = new Location(-1, "---", "---");
             List<Location> locations = new ArrayList<Location>();
             locations.add(locaionStub);
-            locations.addAll((List<Location>) this.locationManager.getAllEntities());
-
-            SimpleItemAdder itemAdder = new SimpleItemAdder(itemStub, container.getId(), new ArrayList<Integer>());
+            locations.addAll((List<Location>) locationManager.getAllEntities());
 
             mav.addAllObjects(result.getModel());
-//            mav.addObject("newItemWithDetails", itemAdder);
-            mav.addObject("containers", containers);
+            mav.addObject("containers", containersStub);
             mav.addObject("locations", locations);
             mav.addObject("categories", categories);
-
-            for (FieldError error : result.getFieldErrors()) {
-                logger.debug(error.getField() + " - " + error.getDefaultMessage());
-            }
 
             return mav;
         }
@@ -471,11 +461,10 @@ public class MainController {
         List<Integer> categories = newItemAdder.getCategories();
         int containerId = newItemAdder.getContainerId();
 
-        System.out.println(newItemAdder.getCategories() == null ? " no categories info provided" : "size  " + newItemAdder.getCategories().size());
-        System.out.println(newItemAdder.getContainerId() == -1 ? " no container info provided" : "desc " + newItemAdder.getContainerId());
-
-        CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getNewEntity(newItemAdder);
-        InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getNewEntity(newItemAdder);
+//        CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getNewEntity(newItemAdder);
+        CategoryDetails cd = categoryDetailsManager.getNewEntityByDetails(newItemAdder);
+//        InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getNewEntity(newItemAdder);
+        InventoryDetails id = inventoryDetailsManager.getNewEntityByDetails(newItemAdder);
 
         int itemId = this.itemManager.addNewEntity(newItem);
         newItem.setId(itemId);
@@ -545,9 +534,12 @@ public class MainController {
         ModelAndView mav = new ModelAndView("itemDetails");
 
         Item item = itemManager.getEntityById(itemId);
-        CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getCategoryDetailsByItem(item);
-        InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getInventoryDetailsByContainer(item);
-        Location location = ((LocationManager) locationManager).getEntityById(item.getLocationId());
+//        CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getCategoryDetailsByItem(item);
+        CategoryDetails cd = (CategoryDetails) categoryDetailsManager.getEntityById(itemId);
+//        InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getInventoryDetailsByContainer(item);
+        InventoryDetails id = (InventoryDetails) inventoryDetailsManager.getEntityById(itemId);
+//        Location location = ((LocationManager) locationManager).getEntityById(item.getLocationId());
+        Location location = (Location) locationManager.getEntityById(item.getLocationId());
         item.setLocation(location.getName());
 
         mav.addObject("itemWithLocation", item);
@@ -561,17 +553,22 @@ public class MainController {
         ModelAndView mav = new ModelAndView("editItemDetails");
 
         Item item = itemManager.getEntityById(itemId);
-        Item container = ((InventoryDetailsManager) inventoryDetailsManager).getContainerByItem(item);
-        CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getCategoryDetailsByItem(item);
-        InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getInventoryDetailsByContainer(item);
-        Location location = ((LocationManager) locationManager).getEntityById(item.getLocationId());
+//        Item container = ((InventoryDetailsManager) inventoryDetailsManager).getContainerByItem(item);
+//        CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getCategoryDetailsByItem(item);
+        CategoryDetails cd = (CategoryDetails) categoryDetailsManager.getEntityById(itemId);
+//        InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getInventoryDetailsByContainer(item);
+        InventoryDetails id = (InventoryDetails) inventoryDetailsManager.getEntityById(itemId);
+//        Location location = (Location) locationManager.getEntityById(item.getLocationId());
+        Location location = (Location) locationManager.getEntityById(item.getLocationId());
+        Item container = inventoryDetailsManager.getContainerByItemId(itemId);
         item.setLocation(location.getName());
 
         List<Integer> categoryIds = new ArrayList<Integer>();
-        for (Category category : cd.getCategories()) {
-            categoryIds.add(category.getId());
+        if (cd.getCategories() != null && !cd.getCategories().isEmpty()) {
+            for (Category category : cd.getCategories()) {
+                categoryIds.add(category.getId());
+            }
         }
-
         SimpleItemAdder itemAdder = new SimpleItemAdder(item, ((container == null) ? -1 : container.getId()), categoryIds);
 
         mav.addObject("editItemDetails", itemAdder);
@@ -580,11 +577,13 @@ public class MainController {
         mav.addObject("locations", locationManager.getAllEntities());
         mav.addObject("categoriesList", categoryManager.getAllEntities());
 //        mav.addObject("containers", this.itemManager.getAllEntities()); //TODO add filtration by 'has container category' query
-        mav.addObject("containers", ((InventoryDetailsManager) inventoryDetailsManager).getAllContainers());
+//        mav.addObject("containers", ((InventoryDetailsManager) inventoryDetailsManager).getAllContainers());
+        mav.addObject("containers", inventoryDetailsManager.getAllContainers());
 
         return mav;
     }
 
+//  TODO: add transaction support
     @RequestMapping(value = {"editItemDetails"}, method = RequestMethod.POST)
     public ModelAndView saveEditedItemDetails(
             @ModelAttribute("editItemDetails") SimpleItemAdder editedItemAdder,
@@ -599,10 +598,13 @@ public class MainController {
             ModelAndView mav = new ModelAndView("editItemDetails");
 
             Item item = itemManager.getEntityById(itemId);
-            Item container = ((InventoryDetailsManager) inventoryDetailsManager).getContainerByItem(item);
-            CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getCategoryDetailsByItem(item);
-            InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getInventoryDetailsByContainer(item);
-            Location location = ((LocationManager) locationManager).getEntityById(item.getLocationId());
+//            CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getCategoryDetailsByItem(item);
+            CategoryDetails cd = (CategoryDetails) categoryDetailsManager.getEntityById(itemId);
+//          InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getInventoryDetailsByContainer(item);
+            InventoryDetails id = (InventoryDetails) inventoryDetailsManager.getEntityById(itemId);
+//          Location location = (Location) locationManager.getEntityById(item.getLocationId());            
+            Item container = id.getContainer();
+            Location location = (Location) locationManager.getEntityById(item.getLocationId());
             item.setLocation(location.getName());
 
             List<Integer> categoryIds = new ArrayList<Integer>();
@@ -619,7 +621,7 @@ public class MainController {
             mav.addObject("locations", locationManager.getAllEntities());
             mav.addObject("categoriesList", categoryManager.getAllEntities());
 //            mav.addObject("containers", this.itemManager.getAllEntities()); //TODO add filtration by 'has container category' query
-            mav.addObject("containers", ((InventoryDetailsManager) inventoryDetailsManager).getAllContainers());
+            mav.addObject("containers", inventoryDetailsManager.getAllContainers());
 
             return mav;
         }
@@ -631,53 +633,50 @@ public class MainController {
         System.out.println(editedItemAdder.getCategories() == null ? " no categories info provided" : "size  " + editedItemAdder.getCategories().size());
         System.out.println(editedItemAdder.getContainerId() == -1 ? " no container info provided" : "desc " + editedItemAdder.getContainerId());
 
-        CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getNewEntity(editedItemAdder);
-        InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getNewEntity(editedItemAdder);
+//        CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getNewEntity(editedItemAdder);
+        CategoryDetails cd = (CategoryDetails) categoryDetailsManager.getNewEntityByDetails(editedItemAdder);
+//        InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getNewEntity(editedItemAdder);
+        InventoryDetails id = (InventoryDetails) inventoryDetailsManager.getNewEntityByDetails(editedItemAdder);
 
         Item oldItem = this.itemManager.getEntityById(itemId);
         if (!oldItem.equals(editedItem)) {
-
-            System.out.println("updated category details " + Arrays.toString(cd.getCategories().toArray()));
-            System.out.println("updated container " + ((id.getContainer() == null) ? "n/a" : id.getContainer().getName()));
 
             System.out.println(this.itemManager.updateEntity(editedItem));
 
         }
 
         int oldContainerId = -1;
-        if (((InventoryDetailsManager) inventoryDetailsManager).getContainerByItem(oldItem) != null) {
-            oldContainerId = ((InventoryDetailsManager) inventoryDetailsManager).getContainerByItem(oldItem).getId();
+//        if (((InventoryDetailsManager) inventoryDetailsManager).getContainerByItem(oldItem) != null) {
+        Item container = inventoryDetailsManager.getContainerByItemId(itemId);
+        if (container != null) {
+            oldContainerId = container.getId();
         }
 
         if (oldContainerId != editedItemAdder.getContainerId()) {
-            ((InventoryDetailsManager) inventoryDetailsManager).updateContainerForItem(oldContainerId,
-                    editedItemAdder.getContainerId(), editedItemAdder.getItem().getId());
+//            ((InventoryDetailsManager) inventoryDetailsManager).updateContainerForItem(oldContainerId, editedItemAdder.getContainerId(), editedItemAdder.getItem().getId());
+            inventoryDetailsManager.updateEntity(id);
         }
 
-        if (editedItemAdder.getCategories().size() != ((CategoryDetailsManager) categoryDetailsManager).getCategoriesByItem(oldItem.getName()).size()) {
-            int[] catIds = new int[editedItemAdder.getCategories().size()];
-            for (int i = 0; i < editedItemAdder.getCategories().size(); i++) {
-                catIds[i] = editedItemAdder.getCategories().get(i);
-            }
+        categoryDetailsManager.updateEntity(cd);
 
-            ((CategoryDetailsManager) categoryDetailsManager).updateCategoriesForItem(catIds, cd);
-        }
-
-        return new ModelAndView("redirect:allCategoryDetailsNew");
+        return new ModelAndView("redirect:allCategoryDetails");
     }
 
     @RequestMapping(value = {"deleteItem"}, method = RequestMethod.GET)
     public ModelAndView deleteItem(@RequestParam("itemId") int itemId) {
-        ModelAndView mav = new ModelAndView("redirect:allCategoryDetailsNew");
+        ModelAndView mav = new ModelAndView("redirect:allCategoryDetails");
 
         if (itemId > 0) {
             Item item = this.itemManager.getEntityById(itemId);
             CategoryDetails cd = this.categoryDetailsManager.getEntityById(itemId);
             InventoryDetails id = this.inventoryDetailsManager.getEntityById(itemId);
 
-            ((InventoryDetailsManager) inventoryDetailsManager).deleteInventoryDetailsForItem(item);
-            ((CategoryDetailsManager) categoryDetailsManager).deleteCategoriesForItem(cd);
-            ((ItemManager) itemManager).deleteItem(item);
+//            ((InventoryDetailsManager) inventoryDetailsManager).deleteInventoryDetailsForItem(item);
+            inventoryDetailsManager.deleteEntityById(itemId);
+//            ((CategoryDetailsManager) categoryDetailsManager).deleteCategoriesForItem(cd);
+            categoryDetailsManager.deleteEntityById(itemId);
+//            ((ItemManager) itemManager).deleteItem(item);
+            itemManager.deleteEntityById(itemId);
 
         }
 
@@ -714,7 +713,7 @@ public class MainController {
     public ModelAndView deleteLocation(@RequestParam("locationId") int locationId) {
         ModelAndView mav = new ModelAndView("redirect:allLocations");
 
-        ((LocationManager) locationManager).deleteEntityById(locationId);
+        locationManager.deleteEntityById(locationId);
 
         return mav;
     }
@@ -750,7 +749,7 @@ public class MainController {
         ModelAndView mav = new ModelAndView("redirect:allCategories");
 
         if (categoryId > 0) {
-            System.out.println("deleted " + ((CategoryManager) categoryManager).deleteEntity(categoryId));
+            System.out.println("deleted " + categoryManager.deleteEntityById(categoryId));
         }
 
         return mav;

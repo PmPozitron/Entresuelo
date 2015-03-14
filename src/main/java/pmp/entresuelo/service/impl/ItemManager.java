@@ -20,23 +20,11 @@ import org.springframework.stereotype.Component;
 public class ItemManager implements AbstractManager {
 
     private static final Logger logger = Logger.getLogger(ItemManager.class);
-//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-//
-//    private static void initLogger() {
-//        ItemManager.logger.addAppender(ItemManager.consoleLog);
-//        ItemManager.logger.setLevel(Level.ALL);
-//        ItemManager.logger.debug(new Date() + " private static void initLogger() {}");
-//    }	// end private static void initLogger() {}
-//
-//    static {
-//        ItemManager.initLogger();
-//    }	// end static
 
     @Autowired
     private AbstractDao itemDao;
         
     public ItemManager() {
-//		ItemManager.initLogger();
         ItemManager.logger.debug(new Date() + " testing new message public ItemManager () {}");
     }	// end public ItemManager () {}
 
@@ -75,6 +63,31 @@ public class ItemManager implements AbstractManager {
     
     public int deleteItem(Item item) {
         return this.itemDao.deleteEntity(item.getId());
+    }
+
+    @Override
+    public List<?> getAllEntities(String filter) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int deleteEntityById(int id) {
+        return itemDao.deleteEntity(id);        
+    }
+
+    @Override
+    public <T> List<T> getAllContainers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public CategoryDetails getNewEntityByDetails(SimpleItemAdder adder) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Item getContainerByItemId(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

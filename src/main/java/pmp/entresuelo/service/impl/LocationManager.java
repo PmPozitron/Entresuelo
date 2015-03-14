@@ -20,17 +20,6 @@ import org.springframework.stereotype.Component;
 public class LocationManager implements AbstractManager {
 
     private static final Logger logger = Logger.getLogger(LocationManager.class);
-//	private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-//	
-//	private static void initLogger() {
-//		LocationManager.logger.addAppender(LocationManager.consoleLog);
-//		LocationManager.logger.setLevel(Level.ALL);
-//		LocationManager.logger.debug(new Date() + " private static void initLogger() {}");		
-//	}	// end private static void initLogger() {}
-//	
-//	static {
-//		LocationManager.initLogger();
-//	}	// end static
 
     @Autowired
     private AbstractDao locationDao;
@@ -73,8 +62,29 @@ public class LocationManager implements AbstractManager {
         return this.locationDao.updateEntity(entity);
     }
 
+    @Override
     public int deleteEntityById(int locationId) {
         return this.locationDao.deleteEntity(locationId);
+    }
+
+    @Override
+    public List<?> getAllEntities(String filter) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public <T> List<T> getAllContainers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public CategoryDetails getNewEntityByDetails(SimpleItemAdder adder) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Item getContainerByItemId(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }	// end public class LocationManager implements AbstractManager {}

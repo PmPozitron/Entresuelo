@@ -22,17 +22,6 @@ import pmp.entresuelo.dao.impl.JdbcInventoryDetailsDao;
 public class InventoryDetailsManager implements AbstractManager {
 
     private static final Logger logger = Logger.getLogger(InventoryDetailsManager.class);
-//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-//
-//    private static void initLogger() {
-//        InventoryDetailsManager.logger.addAppender(InventoryDetailsManager.consoleLog);
-//        InventoryDetailsManager.logger.setLevel(Level.ALL);
-//        InventoryDetailsManager.logger.debug(new Date() + " private static void initLogger() {}");
-//    }	// end private static void initLogger() {}
-//
-//    static {
-//        InventoryDetailsManager.initLogger();
-//    }	// end static
 
     @Autowired
     private AbstractDao inventoryDetailsDao;
@@ -58,9 +47,9 @@ public class InventoryDetailsManager implements AbstractManager {
 
     @Override
     public List<InventoryDetails> getAllEntities() {
-        List<InventoryDetails> inventoryDetails = this.inventoryDetailsDao.getAllEntities();
+//        List<InventoryDetails> inventoryDetails = this.inventoryDetailsDao.getAllEntities();
 
-        return inventoryDetails;
+        return getAllInventories();
     }	// end public List<Item> getAllEntities() {}
 
     public List<InventoryDetails> getAllInventories() {
@@ -82,7 +71,7 @@ public class InventoryDetailsManager implements AbstractManager {
 
     @Override
     public <T> int addNewEntity(T newEntity) {
-        if (((InventoryDetails) newEntity).getContainer()== null) {
+        if (((InventoryDetails) newEntity).getContainer() == null) {
             return 0;
         }
         return this.inventoryDetailsDao.addNewEntity(newEntity);
@@ -97,11 +86,11 @@ public class InventoryDetailsManager implements AbstractManager {
 
         InventoryDetails id = new InventoryDetails();
 //        id.setContainer((Item)this.itemDao.getEntityById(itemAdder.getContainerId()));
-        id.setContainer((itemAdder.getContainerId() == -1 || itemAdder.getContainerId() == 0) 
-                ? null : ((Item)this.itemDao.getEntityById(itemAdder.getContainerId()))
+        id.setContainer((itemAdder.getContainerId() == -1 || itemAdder.getContainerId() == 0)
+                ? null : ((Item) this.itemDao.getEntityById(itemAdder.getContainerId()))
         );
-        
-        List <Item> inventory = new ArrayList<Item>();
+
+        List<Item> inventory = new ArrayList<Item>();
         id.setInventory(inventory);
         id.getInventory().add(itemAdder.getItem());
 
@@ -109,32 +98,65 @@ public class InventoryDetailsManager implements AbstractManager {
     }
 
     @Override
-    public <T> T getEntityById(int id) {
-        return this.inventoryDetailsDao.getEntityById(id);
+    public InventoryDetails getEntityById(int id) {
+//        return this.inventoryDetailsDao.getEntityById(id);
+        return getInventoryDetailsByContainer((Item) itemDao.getEntityById(id));
     }
-    
+
     public InventoryDetails getInventoryDetailsByContainer(Item container) {
-        return ((JdbcInventoryDetailsDao)this.inventoryDetailsDao).getInventoryDetailsByContainer(container);
+        return ((JdbcInventoryDetailsDao) this.inventoryDetailsDao).getInventoryDetailsByContainer(container);
     }
-    
-     public Item getContainerByItem(Item item) {
-         return ((JdbcInventoryDetailsDao)this.inventoryDetailsDao).getContainerByItem(item);         
-     }
+
+    public Item getContainerByItem(Item item) {
+        return ((JdbcInventoryDetailsDao) this.inventoryDetailsDao).getContainerByItem(item);
+    }
 
     @Override
     public <T> int updateEntity(T entity) {
+        InventoryDetails newDetails = (InventoryDetails) entity;
+        int oldContainerId = getContainerByItemId(newDetails.getInventory().get(0).getId()).getId();
+        int newContainerId = -1;
+        
+        if (newDetails.getContainer() == null || newDetails.getContainer().getId() == 0 || newDetails.getContainer().getId() == -1) {
+            
+        } else {
+            newContainerId = newDetails.getContainer().getId();
+        }
+        return updateContainerForItem(oldContainerId, newContainerId, newDetails.getInventory().get(0).getId());
+    }
+
+    public int updateContainerForItem(int oldContainerId, int newContainerId, int itemId) {
+        return ((JdbcInventoryDetailsDao) inventoryDetailsDao).updateContainerForItem(oldContainerId, newContainerId, itemId);
+    }
+
+    public int deleteInventoryDetailsForItem(Item item) {
+        return ((JdbcInventoryDetailsDao) inventoryDetailsDao).deleteInventoryDetailsForItem(item);
+    }
+
+    @Override
+    public List<Item> getAllContainers() {
+        return ((JdbcInventoryDetailsDao) inventoryDetailsDao).getAllContainers();
+    }
+
+    @Override
+    public List<?> getAllEntities(String filter) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    public int updateContainerForItem(int oldContainerId, int newContainerId, int itemId) {
-        return ((JdbcInventoryDetailsDao)inventoryDetailsDao).updateContainerForItem(oldContainerId, newContainerId, itemId);
+
+    @Override
+    public int deleteEntityById(int id) {
+        return deleteInventoryDetailsForItem((Item) itemDao.getEntityById(id));
     }
-    
-    public int deleteInventoryDetailsForItem(Item item) {
-        return ((JdbcInventoryDetailsDao)inventoryDetailsDao).deleteInventoryDetailsForItem(item);
+
+    @Override
+    public InventoryDetails getNewEntityByDetails(SimpleItemAdder adder) {
+        return getNewEntity(adder);
     }
-    
-    public List<Item> getAllContainers() {
-        return ((JdbcInventoryDetailsDao)inventoryDetailsDao).getAllContainers();
+
+    @Override
+    public Item getContainerByItemId(int id) {
+        Item item = (Item) itemDao.getEntityById(id);
+
+        return getContainerByItem(item);
     }
 }	// end public class InventoryDetailsManager implements AbstractManager {}

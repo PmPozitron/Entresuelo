@@ -19,23 +19,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pmp.entresuelo.dao.impl.JdbcCategoryDetailsDao;
+import pmp.entresuelo.core.SimpleItemAdder;
 
 //@Component("categoryDetailsManager")
 //@Transactional(propagation=Propagation.SUPPORTS, readOnly=true)
 public class CategoryDetailsManager implements AbstractManager {
 
     private static final Logger logger = Logger.getLogger(CategoryDetailsManager.class);
-//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-//
-//    private static void initLogger() {
-//        CategoryDetailsManager.logger.addAppender(CategoryDetailsManager.consoleLog);
-//        CategoryDetailsManager.logger.setLevel(Level.ALL);
-//        CategoryDetailsManager.logger.debug(new Date() + " private static void initLogger() {}");
-//    }	// end private static void initLogger() {}
-//
-//    static {
-//        CategoryDetailsManager.initLogger();
-//    }	// end static
 
     @Autowired
     private AbstractDao categoryDetailsDao;
@@ -45,33 +35,26 @@ public class CategoryDetailsManager implements AbstractManager {
     private AbstractDao itemDao;
 
     public CategoryDetailsManager() {
-//		CategoryDetailsManager.initLogger();
         CategoryDetailsManager.logger.debug(new Date() + " testing new message public CategoryDetailsManager () {}");
     }	// end public CategoryDetailsManager () {}
 
     public void setCategoryDetailsDao(AbstractDao dao) {
-        CategoryDetailsManager.logger.debug(new Date() + " public void setDao(AbstractDao dao) {}");
-
         this.categoryDetailsDao = dao;
     }	// end public void setManager(AbstractManager manager) {}
 
     public void setCategoryDao(AbstractDao dao) {
-        CategoryDetailsManager.logger.debug(new Date() + " public void setCategorydao(AbstractDao dao) {}");
-
         this.categoryDao = dao;
     }   // end public void setCategorydao(AbstractDao dao) {}
 
     public void setItemDao(AbstractDao dao) {
-        CategoryDetailsManager.logger.debug(new Date() + " public void setItemDao(AbstractDao dao) {}");
-
         this.itemDao = dao;
     }   // end public void setItemDao(AbstractDao dao) {}
 
     @Override
     public List<CategoryDetails> getAllEntities() {
-        List<CategoryDetails> categoryDetails = this.categoryDetailsDao.getAllEntities();
+//        List<CategoryDetails> categoryDetails = this.categoryDetailsDao.getAllEntities();      
 
-        return categoryDetails;
+        return getAllCategoryDetails();
     }	// end public List<Item> getAllEntities() {}
 
     public List<CategoryDetails> getAllCategoryDetails() {
@@ -85,7 +68,7 @@ public class CategoryDetailsManager implements AbstractManager {
 
         return categoryDetails;
     }   // end public List<CategoryDetails> getAllCategoryDetails() {}
-
+    
     @Override
     public <T> int addNewEntity(T newEntity) {
         if (((CategoryDetails)newEntity).getCategories() == null || ((CategoryDetails)newEntity).getCategories().isEmpty()) {
@@ -94,7 +77,7 @@ public class CategoryDetailsManager implements AbstractManager {
         
         return this.categoryDetailsDao.addNewEntity(newEntity);
     }
-
+    
     @Override
     public CategoryDetails getNewEntity() {
         return new CategoryDetails();
@@ -130,8 +113,10 @@ public class CategoryDetailsManager implements AbstractManager {
     }
 
     @Override
-    public <T> int updateEntity(T entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public <T> int updateEntity(T updatedEntity) {
+        CategoryDetails cd = (CategoryDetails)updatedEntity;
+        
+        return updateCategoriesForItem(cd.getCategories(), cd);
     }
     
 //    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
@@ -140,7 +125,7 @@ public class CategoryDetailsManager implements AbstractManager {
             ((JdbcCategoryDetailsDao)(categoryDetailsDao)).deleteCategoriesForItem(cd.getItem());
         }
         
-        if (newCategories != null && newCategories.isEmpty()) {
+        if (newCategories != null && !newCategories.isEmpty()) {
             return ((JdbcCategoryDetailsDao)(categoryDetailsDao)).insertCategoryDetailsForItem(newCategories, cd.getItem());
         }
         
@@ -161,5 +146,30 @@ public class CategoryDetailsManager implements AbstractManager {
     
     public int deleteCategoriesForItem(CategoryDetails cd) {
         return this.updateCategoriesForItem(new ArrayList<Category>(), cd);
+    }
+
+    @Override
+    public List<?> getAllEntities(String filter) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int deleteEntityById(int id) {
+        return deleteCategoriesForItem((CategoryDetails) getEntityById(id));
+    }
+
+    @Override
+    public <T> List<T> getAllContainers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public CategoryDetails getNewEntityByDetails(SimpleItemAdder itemAdder) {
+        return getNewEntity(itemAdder);  
+    }
+
+    @Override
+    public Item getContainerByItemId(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }   // end public class CategoryDetailsManager implements AbstractManager {}

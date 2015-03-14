@@ -17,6 +17,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import pmp.entresuelo.core.Category;
 import pmp.entresuelo.core.CategoryDetails;
 import pmp.entresuelo.core.Item;
+import pmp.entresuelo.service.impl.CategoryDetailsManager;
 
 public class TransactionTestDrive {
     
@@ -33,6 +34,11 @@ public class TransactionTestDrive {
         CategoryDetails cd = new CategoryDetails((Item)im.getEntityById(1), categories);
         
         System.out.println(cdm.addNewEntity(cd));
+        
+        List<Category> newCategories = new ArrayList<Category>();
+        newCategories.add((Category)cm.getEntityById(4));
+        cd = new CategoryDetails((Item)im.getEntityById(1), newCategories);
+        System.out.println(cdm.updateEntity(cd));
     }
     
 }

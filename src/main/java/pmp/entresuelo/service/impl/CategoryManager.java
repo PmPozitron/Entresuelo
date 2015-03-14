@@ -21,17 +21,6 @@ import pmp.entresuelo.dao.impl.JdbcCategoryDetailsDao;
 public class CategoryManager implements AbstractManager {
 
     private static final Logger logger = Logger.getLogger(CategoryManager.class);
-//    private static final ConsoleAppender consoleLog = new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT);
-//
-//    private static void initLogger() {
-//        CategoryManager.logger.addAppender(CategoryManager.consoleLog);
-//        CategoryManager.logger.setLevel(Level.ALL);
-//        CategoryManager.logger.debug(new Date() + " private static void initLogger() {}");
-//    }	// end private static void initLogger() {}
-//
-//    static {
-//        CategoryManager.initLogger();
-//    }	// end static
 
     @Autowired
     private AbstractDao categoryDao;
@@ -76,5 +65,31 @@ public class CategoryManager implements AbstractManager {
     
     public int deleteEntity(int idToDelete) {
         return this.categoryDao.deleteEntity(idToDelete);    }
+
+    @Override
+    public List<?> getAllEntities(String filter) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int deleteEntityById(int id) {
+        
+        return categoryDao.deleteEntity(id);
+    }
+
+    @Override
+    public <T> List<T> getAllContainers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public CategoryDetails getNewEntityByDetails(SimpleItemAdder adder) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Item getContainerByItemId(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }	// end public class CategoryManager implements AbstractManager {}
