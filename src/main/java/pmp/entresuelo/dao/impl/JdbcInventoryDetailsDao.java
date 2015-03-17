@@ -188,8 +188,6 @@ public class JdbcInventoryDetailsDao extends JdbcTemplate implements AbstractDao
         }
         
         return null;
-        
-//        throw new UnsupportedOperationException("JdbcInventoryDetailsDao.getEntityById() - don't see any sense in this method here, 28/02/2015");
     }   // end public Item getEntityById(int id) {}
 
     @Override
