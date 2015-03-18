@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import pmp.entresuelo.core.Category;
 import pmp.entresuelo.core.CategoryDetails;
@@ -39,6 +40,8 @@ public class ItemAndDetailsManagerTestDrive {
     private InventoryDetailsManager invDetsManager = new InventoryDetailsManager();
     private CategoryDetailsManager catDetsManager = new CategoryDetailsManager();
     private ItemAndDetailsManager itemManager;
+    
+    private DataSourceTransactionManager txManager;
 
     public static void main(String[] args) {
         ItemAndDetailsManagerTestDrive testDrive = new ItemAndDetailsManagerTestDrive();
@@ -53,7 +56,7 @@ public class ItemAndDetailsManagerTestDrive {
         List<Category> categories = new ArrayList<Category>();
         Category catOne = catManager.getEntityById(1);
         Category catTwo = catManager.getEntityById(2);
-        Category catThree = new Category(-1, "fake", "counterfeit");
+        Category catThree = new Category(-1, "fake", "counterfeit");    // with this string transaction should not be commited
         categories.add(catOne);
         categories.add(catTwo);
         categories.add(catThree);
@@ -86,7 +89,6 @@ public class ItemAndDetailsManagerTestDrive {
         System.out.println("catDetsCountAfterTx " + catDetsCountAfterTx);
         System.out.println("invDetsAfterTx " + invDetsAfterTx);
         System.out.println("itemsInContainerAfterTx " + itemsInContainerAfterTx);
-
     }
 
     private void setDataSource() {
@@ -127,7 +129,7 @@ public class ItemAndDetailsManagerTestDrive {
         AbstractManager cm = ctx.getBean("categoryManager", AbstractManager.class);
         
         itemManager = ctx.getBean("itemManager", ItemAndDetailsManager.class);  
-        catManager = ctx.getBean("categoryManager", AbstractManager.class);
+        catManager = ctx.getBean("categoryManager", AbstractManager.class);       
     }
 
     private void setUp() {

@@ -118,7 +118,7 @@ public class MainControllerTest {
         logger.debug(new Date() + " public void thatRootRequestReturnsHelloView() throws Exception {}\n" 
                 + this.mockMvc.perform(get("/")).andReturn().getModelAndView().getViewName());
                 
-        this.mockMvc.perform(get("/")).andExpect(view().name("hello"));
+        this.mockMvc.perform(get("/")).andExpect(view().name("redirect:allItems"));
     }   // end public void thatRootRequestReturnsHelloView() {}
     
     @Test
@@ -126,7 +126,7 @@ public class MainControllerTest {
         logger.debug(new Date() + " public void thatWelcomeRequestReturnsHelloView() throws Exception {}\n" + 
                 this.mockMvc.perform(get("/welcome")).andReturn().getModelAndView().getViewName());
         
-        this.mockMvc.perform(get("/welcome")).andExpect(view().name("hello"));        
+        this.mockMvc.perform(get("/welcome")).andExpect(view().name("redirect:allItems"));        
     }   // end public void thatAdminRequestReturnsLoginView() throws Exception {}
     
     @Test

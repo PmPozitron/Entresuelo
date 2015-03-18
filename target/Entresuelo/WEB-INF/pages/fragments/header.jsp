@@ -30,7 +30,21 @@
 
             <a href='/Entresuelo/allCategories'>Перечень категорий</a>
             <span>&nbsp;&nbsp;&nbsp;</span>
+            <c:choose>
+                <c:when test="${pageContext.request.isUserInRole('ROLE_ADMIN')}">
+<%--                    <a href="<c:url value='/login?logout' />">  --%>
+                    <a href="<c:url value='/j_spring_security_logout' />">
+                        <c:out value="Выйти из системы"></c:out>
+                    </a>
+                </c:when>
 
-            <a href='/Entresuelo/login?logout'>Выйти из системы</a>		
+                <c:otherwise>
+                    <a href="<c:url value='/login' />">
+                        <c:out value="Авторизоваться"></c:out>
+                    </a>
+                </c:otherwise>
+            </c:choose>
+
+
         </center>
         <hr>

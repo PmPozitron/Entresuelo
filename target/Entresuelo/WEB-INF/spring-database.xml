@@ -13,7 +13,7 @@
     <tx:annotation-driven transaction-manager="txManager" />
 
     <bean id="dataSource"
-              class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://localhost:3306/entresuelo?characterEncoding=UTF-8" />
@@ -25,8 +25,15 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
     	
-    <bean id="itemManager" class="pmp.entresuelo.service.impl.ItemManager">
+    <!--    <bean id="itemManager" class="pmp.entresuelo.service.impl.ItemManager">
         <property name="itemDao" ref="itemDao" />	
+    </bean>	-->
+    
+    <bean id="itemManager" class="pmp.entresuelo.service.impl.ItemAndDetailsManagerImpl">
+        <property name="itemDao" ref="itemDao" />
+        <property name="categoryDao" ref="categoryDao" />
+        <property name="categoryDetailsDao" ref="categoryDetailsDao" />
+        <property name="inventoryDetailsDao" ref="inventoryDetailsDao" />
     </bean>	
 	
     <bean id="itemDao" class="pmp.entresuelo.dao.impl.JdbcItemDao">

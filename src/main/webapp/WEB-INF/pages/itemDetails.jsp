@@ -3,9 +3,11 @@
 <center>
     <table id="theTable">
 
-        <tr>
+        <tr><form:hidden path="itemWithLocation.id"></form:hidden></tr>
 
-            <td>"${itemWithLocation.name}"</td>			
+            <tr>
+
+                <td>"${itemWithLocation.name}"</td>			
 
         </tr>
 
@@ -34,5 +36,18 @@
         </tr>    
 
     </table>
+
+    <c:if test="${pageContext.request.isUserInRole('ROLE_ADMIN')}">
+        
+        <a href="<c:url value="/editItemDetails?itemId=${itemWithLocation.id}" />">
+            <c:out value="редактировать"></c:out>
+            </a>
+
+            <span>&nbsp;&nbsp;&nbsp;</span>
+
+            <a href="<c:url value="/deleteItem?itemId=${itemWithLocation.id}" />">
+            <c:out value="удалить"></c:out>
+            </a>
+    </c:if>
 </center>
 <%@include file="fragments/footer.jsp" %>

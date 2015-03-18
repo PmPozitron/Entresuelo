@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.apache.log4j.Logger;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
@@ -31,6 +32,7 @@ import pmp.entresuelo.core.ItemAdder;
 import pmp.entresuelo.core.Location;
 import pmp.entresuelo.core.SimpleItemAdder;
 import pmp.entresuelo.service.AbstractManager;
+import pmp.entresuelo.service.ItemAndDetailsManager;
 import pmp.entresuelo.service.validation.CategoryValidator;
 import pmp.entresuelo.service.validation.ItemAdderValidator;
 import pmp.entresuelo.service.validation.ItemValidator;
@@ -46,10 +48,12 @@ import pmp.entresuelo.service.impl.LocationManager;
 public class MainController {
 
     private static final Logger logger = Logger.getLogger(MainController.class);
-//  private static final ConsoleAppender consoleLog = new ConsoleAppender (new SimpleLayout(), ConsoleAppender.SYSTEM_ERR);
 
     @Autowired
-    AbstractManager itemManager;
+    ItemAndDetailsManager itemManager;
+
+//    @Autowired
+//    AbstractManager itemManager;
 //    ItemManager itemManager;
 
     @Autowired
@@ -102,10 +106,11 @@ public class MainController {
 
     public MainController() {
 
-    }	// public class MainController () {}
+    }	// public class MainController () {}   
 
 //    public void setitemManager(AbstractManager manager) {
-    public void setitemManager(ItemManager manager) {
+//    public void setItemManager(ItemManager manager) {
+    public void setItemAndDetailsManager(ItemAndDetailsManager manager) {
         this.itemManager = manager;
     }	// end public void setManager(AbstractManager manager) {}
 
@@ -133,9 +138,11 @@ public class MainController {
     public ModelAndView defaultPage() {
 
         ModelAndView model = new ModelAndView();
-        model.addObject("title", "Spring Security Login Form - Database Authentication");
-        model.addObject("message", "This is default page!");
-        model.setViewName("hello");
+//        model.addObject("title", "Spring Security Login Form - Database Authentication");
+//        model.addObject("message", "This is default page!");
+//        model.setViewName("hello");
+        model.setViewName("redirect:allItems");
+        
         return model;
 
     }
@@ -203,7 +210,8 @@ public class MainController {
 
         ModelAndView model = new ModelAndView();
 
-        List<Item> items = (List<Item>) itemManager.getAllEntities();
+//        List<Item> items = (List<Item>) itemManager.getAllEntities();
+        List<Item> items = (List<Item>) itemManager.getAllItems();
 
         model.setViewName("allItems");
         model.addObject("items", items);
@@ -344,7 +352,8 @@ public class MainController {
         Item itemStub = new Item(-1, "---", "---", -1, "---");
         List<Item> containers = new ArrayList<Item>();
         containers.add(itemStub);
-        containers.addAll((List<Item>) this.itemManager.getAllEntities());
+//        containers.addAll((List<Item>) this.itemManager.getAllEntities());
+        containers.addAll(itemManager.getAllItems());
 
         List<Category> categories = (List<Category>) this.categoryManager.getAllEntities();
 
@@ -375,7 +384,8 @@ public class MainController {
             Item itemStub = new Item(-1, "---", "---", -1, "---");
             List<Item> containers = new ArrayList<Item>();
             containers.add(itemStub);
-            containers.addAll((List<Item>) this.itemManager.getAllEntities());
+//            containers.addAll((List<Item>) this.itemManager.getAllEntities());
+            containers.addAll(itemManager.getAllItems());
 
             List<Category> categories = (List<Category>) this.categoryManager.getAllEntities();
 
@@ -391,7 +401,8 @@ public class MainController {
         ModelAndView model = new ModelAndView();
         model.setViewName("redirect:allItems");
 
-        MainController.logger.debug(new Date() + " added entity with id " + this.itemManager.addNewEntity(item));
+//        MainController.logger.debug(new Date() + " added entity with id " + this.itemManager.addNewEntity(item));
+        MainController.logger.debug(new Date() + " added entity with id " + this.itemManager.addItem(item));
 
         return model;
     }   // end public ModelAndView addItem() {}
@@ -466,7 +477,8 @@ public class MainController {
 //        InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getNewEntity(newItemAdder);
         InventoryDetails id = inventoryDetailsManager.getNewEntityByDetails(newItemAdder);
 
-        int itemId = this.itemManager.addNewEntity(newItem);
+//        int itemId = this.itemManager.addNewEntity(newItem);
+        int itemId = this.itemManager.addItem(newItem);
         newItem.setId(itemId);
         logger.debug(itemId + "\n"
                 + +this.categoryDetailsManager.addNewEntity(cd) + "\n"
@@ -533,7 +545,8 @@ public class MainController {
     public ModelAndView getItemDetails(@RequestParam("itemId") int itemId) {
         ModelAndView mav = new ModelAndView("itemDetails");
 
-        Item item = itemManager.getEntityById(itemId);
+//        Item item = itemManager.getEntityById(itemId);
+        Item item = itemManager.getItemById(itemId);
 //        CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getCategoryDetailsByItem(item);
         CategoryDetails cd = (CategoryDetails) categoryDetailsManager.getEntityById(itemId);
 //        InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getInventoryDetailsByContainer(item);
@@ -552,7 +565,8 @@ public class MainController {
     public ModelAndView editItemDetails(@RequestParam("itemId") int itemId) {
         ModelAndView mav = new ModelAndView("editItemDetails");
 
-        Item item = itemManager.getEntityById(itemId);
+//        Item item = itemManager.getEntityById(itemId);
+        Item item = itemManager.getItemById(itemId);
 //        Item container = ((InventoryDetailsManager) inventoryDetailsManager).getContainerByItem(item);
 //        CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getCategoryDetailsByItem(item);
         CategoryDetails cd = (CategoryDetails) categoryDetailsManager.getEntityById(itemId);
@@ -597,7 +611,8 @@ public class MainController {
 
             ModelAndView mav = new ModelAndView("editItemDetails");
 
-            Item item = itemManager.getEntityById(itemId);
+//            Item item = itemManager.getEntityById(itemId);
+            Item item = itemManager.getItemById(itemId);
 //            CategoryDetails cd = ((CategoryDetailsManager) categoryDetailsManager).getCategoryDetailsByItem(item);
             CategoryDetails cd = (CategoryDetails) categoryDetailsManager.getEntityById(itemId);
 //          InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getInventoryDetailsByContainer(item);
@@ -638,10 +653,12 @@ public class MainController {
 //        InventoryDetails id = ((InventoryDetailsManager) inventoryDetailsManager).getNewEntity(editedItemAdder);
         InventoryDetails id = (InventoryDetails) inventoryDetailsManager.getNewEntityByDetails(editedItemAdder);
 
-        Item oldItem = this.itemManager.getEntityById(itemId);
+//        Item oldItem = this.itemManager.getEntityById(itemId);
+        Item oldItem = this.itemManager.getItemById(itemId);
         if (!oldItem.equals(editedItem)) {
 
-            System.out.println(this.itemManager.updateEntity(editedItem));
+//            System.out.println(this.itemManager.updateEntity(editedItem));
+            System.out.println(this.itemManager.updateItem(editedItem));
 
         }
 
@@ -667,7 +684,8 @@ public class MainController {
         ModelAndView mav = new ModelAndView("redirect:allCategoryDetails");
 
         if (itemId > 0) {
-            Item item = this.itemManager.getEntityById(itemId);
+//            Item item = this.itemManager.getEntityById(itemId);
+            Item item = this.itemManager.getItemById(itemId);
             CategoryDetails cd = this.categoryDetailsManager.getEntityById(itemId);
             InventoryDetails id = this.inventoryDetailsManager.getEntityById(itemId);
 
@@ -676,7 +694,8 @@ public class MainController {
 //            ((CategoryDetailsManager) categoryDetailsManager).deleteCategoriesForItem(cd);
             categoryDetailsManager.deleteEntityById(itemId);
 //            ((ItemManager) itemManager).deleteItem(item);
-            itemManager.deleteEntityById(itemId);
+//            itemManager.deleteEntityById(itemId);
+            itemManager.deleteItemById(itemId);
 
         }
 

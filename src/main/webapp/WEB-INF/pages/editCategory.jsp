@@ -3,7 +3,7 @@
 <center>
     <form:form method="POST" commandName="editCategory">
 
-        <table border="1" id="addLocationTable">
+        <table id="addCategoryTable">
             <thead>
                 <tr>
                     <th><fmt:message key="editCategory.enterName" /></th>
