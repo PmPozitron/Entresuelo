@@ -1,4 +1,9 @@
-target/*
+/target
 /nb-configuration.xml
 /nbactions.xml
 /project_progress.txt
+
+target
+nb-configuration.xml
+nbactions.xml
+project_progress.txt
