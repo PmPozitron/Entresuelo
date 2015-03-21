@@ -12,9 +12,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pmp.entresuelo.core.Category;
 import pmp.entresuelo.core.CategoryDetails;
 import pmp.entresuelo.core.InventoryDetails;
 import pmp.entresuelo.core.Item;
+import pmp.entresuelo.core.SimpleItemAdder;
 import pmp.entresuelo.dao.AbstractDao;
 import pmp.entresuelo.dao.impl.JdbcCategoryDetailsDao;
 import pmp.entresuelo.dao.impl.JdbcInventoryDetailsDao;
@@ -116,7 +118,38 @@ public abstract class ItemAndDetailsManager {
 
 //        return inventoryDetailsDao.getEntityById(id);
         Item container = itemDao.getEntityById(id);
-        return ((JdbcInventoryDetailsDao)inventoryDetailsDao).getInventoryDetailsByContainer(container);
+        return ((JdbcInventoryDetailsDao) inventoryDetailsDao).getInventoryDetailsByContainer(container);
+    }
+
+    public CategoryDetails getNewCategoryDetailsByAdder(SimpleItemAdder itemAdder) {
+
+        CategoryDetails cd = new CategoryDetails();
+        cd.setItem(itemAdder.getItem());
+        List<Category> categories = new ArrayList<Category>();
+        cd.setCategories(categories);
+
+        if (itemAdder.getCategories() != null) {
+            for (int id : itemAdder.getCategories()) {
+                cd.getCategories().add((Category) this.categoryDao.getEntityById(id));
+            }
+        }
+
+        return cd;
+    }
+
+    public InventoryDetails getNewInventoryDetailsByAdder(SimpleItemAdder itemAdder) {
+
+        InventoryDetails id = new InventoryDetails();
+//        id.setContainer((Item)this.itemDao.getEntityById(itemAdder.getContainerId()));
+        id.setContainer((itemAdder.getContainerId() == -1 || itemAdder.getContainerId() == 0)
+                ? null : ((Item) this.itemDao.getEntityById(itemAdder.getContainerId()))
+        );
+
+        List<Item> inventory = new ArrayList<Item>();
+        id.setInventory(inventory);
+        id.getInventory().add(itemAdder.getItem());
+
+        return id;
     }
 
     public Item getContainerByItemId(int id) {
@@ -152,6 +185,7 @@ public abstract class ItemAndDetailsManager {
 
         return inventoryDetailsDao.addNewEntity(newInventoryDetails);
     }
+
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public int addItemWithDetails(Item newItem, CategoryDetails newCategoryDetails, InventoryDetails newInventoryDetails) {
         int newItemId = addItem(newItem);
@@ -159,7 +193,7 @@ public abstract class ItemAndDetailsManager {
         newInventoryDetails.getInventory().get(0).setId(newItemId);
         addCategoryDetails(newCategoryDetails);
         addInventoryDetails(newInventoryDetails);
-        
+
         return newItemId;
     }
 
@@ -176,7 +210,7 @@ public abstract class ItemAndDetailsManager {
             return 0;
         }
 
-        return categoryDetailsDao.updateEntity(updateCategoryDetails(updatedCategoryDetails));
+        return categoryDetailsDao.updateEntity(updatedCategoryDetails);
     }
 
     public int updateInventoryDetails(InventoryDetails updatedDetails) {
@@ -184,8 +218,15 @@ public abstract class ItemAndDetailsManager {
             throw new IllegalArgumentException(new Date() + " IllegalArgumentException in updateInventoryDetails()");
         }
 //      there should be only one item in inventory in context calling this method.
-//      there's only possibility to move one particular item from one container to another via editItemDetails functionality.        
-        int oldContainerId = getContainerByItemId(updatedDetails.getInventory().get(0).getId()).getId();
+//      there's only possibility to move one particular item from one container to another via editItemDetails functionality.  
+        Item oldContainer = getContainerByItemId(updatedDetails.getInventory().get(0).getId());
+        int oldContainerId;
+        if (oldContainer == null) {
+            oldContainerId = -1;
+        
+        } else {
+            oldContainerId = getContainerByItemId(updatedDetails.getInventory().get(0).getId()).getId();
+        }
         int newContainerId = -1;
 
         if (updatedDetails.getContainer() == null || updatedDetails.getContainer().getId() == 0 || updatedDetails.getContainer().getId() == -1) {
@@ -221,15 +262,16 @@ public abstract class ItemAndDetailsManager {
         return categoryDetailsDao.deleteEntity(id);
     }
 //  this should remove item being deleted from it's container
+
     public int deleteInventoryDetailsByItemId(int itemId) {
         if (itemId < 1) {
             return 0;   // TODO: maybe IllegalArgumentException is more apppropriate here ?
         }
-        
+
         int containerId = getContainerByItemId(itemId).getId();
-        return ((JdbcInventoryDetailsDao)inventoryDetailsDao).deleteInventoryDetail(containerId, itemId);
+        return ((JdbcInventoryDetailsDao) inventoryDetailsDao).deleteInventoryDetail(containerId, itemId);
     }
-    
+
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public int deleteItemWithDetails(int itemId) {
         return deleteCategoryDetailsByItemId(itemId) + deleteInventoryDetailsByItemId(itemId) + deleteItemById(itemId);

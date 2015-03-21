@@ -118,7 +118,16 @@ public class JdbcCategoryDetailsDao extends JdbcTemplate implements AbstractDao 
 
     @Override
     public <T> int updateEntity(T updatedEntity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CategoryDetails cd = (CategoryDetails) updatedEntity;
+        if (cd != null) {
+            deleteCategoriesForItem(cd.getItem());
+        }
+
+        if (cd.getCategories() != null && !cd.getCategories().isEmpty()) {
+            return insertCategoryDetailsForItem(cd.getCategories(), cd.getItem());
+        }
+
+        return -1;
     }
 
     public int deleteCategoriesForItem(Item item) {
